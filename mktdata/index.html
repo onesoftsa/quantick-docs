@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Market Data API - quantick/neutrino</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Market Data API";
+    var mkdocs_page_input_path = "mktdata.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> quantick/neutrino</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Primeiros passos</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Market Data API</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#instrumento">Instrumento</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#assinatura">Assinatura</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#acesso">Acesso</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#desassinatura">Desassinatura</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#callbacks">Callbacks</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#atributos-e-metodos">Atributos e métodos</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#book">Book</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#trades">Trades</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#candles">Candles</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#assinatura_1">Assinatura</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#acesso_1">Acesso</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#atributos-e-metodos_1">Atributos e métodos</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#desassinatura_1">Desassinatura</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#indicadores">Indicadores</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#indicadores-disponiveis">Indicadores disponíveis</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#acceso-aos-valores">Acceso aos valores</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#atributos">Atributos</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#source">Source</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#average">Average</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#desassinatura_2">Desassinatura</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#callbacks_1">Callbacks</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#callbacks-inicio-e-fim">Callbacks inicio e fim</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#quitreason">QuitReason</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#callback-default-book-trade-e-candles">Callback default, book, trade e candles</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#candle-vazio">Candle Vazio</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#direto">Direto</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#utilitarios">Utilitários</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scheduler">Scheduler</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#atributos_1">Atributos</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#summaryline">SummaryLine</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#assinatura_2">Assinatura</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#acesso_2">Acesso</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#desassinatura_3">Desassinatura</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#controle-de-recursos">Controle de recursos</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../orders/">Orders Routing API</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">quantick/neutrino</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Market Data API</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="market-data-api">Market Data API</h1>
+<h2 id="instrumento">Instrumento</h2>
+<p>O <code>InstrumentRegister</code> representa o objeto pelo qual são disponibilizados o book e o buffer trades.</p>
+<h3 id="assinatura">Assinatura</h3>
+<p>Para assinar um instrumento use a função add especifique o nome do ativo, o tamanho do buffer de trades e as callbacks de mercado:</p>
+<table>
+<thead>
+<tr>
+<th>Função</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add(&lt;symbol&gt;, book_callback=on_data, trade_callback=on_data, trade_buffer_size=64)</code></td>
+<td>Adiciona um instrumento, usando como argumentos:<ul><li>symbol: string com o nome do ativo a ser assinado, ex. 'WINQ19'</li><li>book_callback: callback a ser disparada na notificação de mudança de book</li><li>trade_callback: callback a ser disparada na notificação de trade</li><li>trade_buffer_size: quantidade máxima de trades contidos no buffer a cada notificação</ul>Um objeto do tipo InstrumentRegister é devolvido no caso de sucesso. Caso o símbolo não seja válido ou o tamanho do buffer ultrapasse 64 elementos, <code>None</code> é devolvido.</td>
+</tr>
+</tbody>
+</table>
+<p></br>
+Por exemplo:</p>
+<pre><code class="language-python">from neutrino import market
+
+# Uso de duas callbacks customizadas
+self.win = market.add(
+    'WINQ19',
+    book_callback=on_book,
+    trade_callback=on_trade,
+    trade_buffer_size=10)
+
+# Cancelada callback de book e uso de callback default on_data para trades
+self.wdo = market.add('WDOQ19', book_callback=None, trade_buffer_size=50)
+</code></pre>
+<p>A callback default é chamada <em>on_data</em> e precisa ser implementada pelo
+usuário para ser notificado sobre as mudanças de book e trades.</p>
+<p>As assinaturas estão baseadas em ativos podendo ser feitas em qualquer
+momento da operação da estratégia. A assinatura de um ativo gera
+automaticamente estruturas de dados preenchidas com informações do book
+e os trades que acontecem nesse momento. Vale lembrar que os trades do
+começo do dia não estão nesta lista.</p>
+<h3 id="acesso">Acesso</h3>
+<p>Caso o instrumento não tenha sido salvo no momento da assinatura, é
+possível utilizar a função <em>get</em> para recuperá-lo:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get(&lt;symbol&gt;)</code></td>
+<td>Devolve um instrumento já cadastrado usando como argumento a string com o nome do símbolo. Caso o nome seja inválido <em>None</em> é devolvido.</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+Por exemplo:</p>
+<pre><code class="language-python">self.instrument = market.get('WINQ19')
+</code></pre>
+<h3 id="desassinatura">Desassinatura</h3>
+<p>Para remover um instrumento utilize o objeto obtido pela criação do
+mesmo:</p>
+<pre><code class="language-python">self.instrument = neutrino.market.get('WINDOM19')
+if neutrino.market.remove(self.instrument):
+    print('success')
+</code></pre>
+<p>A função <em>remove </em>é parte do módulo <em>market:</em></p>
+<table>
+<thead>
+<tr>
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>remove(&lt;instrument&gt;)</code></td>
+<td><p>Remove um instrumento. O <em>instrument</em> deve ser um objeto válido devolvido pela assinatura ou obtido pelo método <em>get. </em>A função retorna <em>True </em>em caso se sucesso, <em>False </em>caso contrário.</p><p>O objeto <em>instrument </em>passado como parâmetro é invalidado no sucesso da operação.</p></td>
+</tr>
+</tbody>
+</table>
+<p><br>
+Na remoção de um instrumento os candles relacionado a ele não são
+removidos de maneira automática, eles continuam sendo atualizados.</p>
+<h3 id="callbacks">Callbacks</h3>
+<p>Ao assinar determinada estrutura de análise é possível configurar as
+futuras callbacks, podendo mudar a callback default on_data para outra
+função, por exemplo:</p>
+<pre><code class="language-python">def initialize(self, symbols):
+    market.add('WINQ19', book_callback=on_win_callback, trade_callback=None)
+    market.add('WDOM19', book_callback=None, trade_callback=on_wdo_callback)
+
+def on_win_callback(self, update):
+    print('WINQ19 bar received')
+
+def on_wdo_callback(self, update):
+    print('WDOQ19 bar received')
+</code></pre>
+<p>Inclusive é possivel cancelar a callback para determinada assinatura. No
+exemplo a seguir, o usuário cancela a callback do book, porém mantem as
+notificações dos trades por meio da callback default on_data:</p>
+<pre><code class="language-python">def initialize(self, symbols):
+    market.add('WINQ19', book_callback=None)
+
+def on_data(self, update):
+    print('WINQ19 trade')
+</code></pre>
+<h3 id="atributos-e-metodos">Atributos e métodos</h3>
+<p>Os atributos a seguir estão disponível para uma instancia do
+<em>InstrumentRegister</em>:</p>
+<ul>
+<li>
+<p>name: nome do símbolo</p>
+</li>
+<li>
+<p>book: book de ofertas</p>
+</li>
+<li>
+<p>trades: buffer circular de trades</p>
+</li>
+<li>
+<p>min_order_qty: lote mínimo</p>
+</li>
+<li>
+<p>price_increment: tick mínimo</p>
+</li>
+<li>
+<p>ready(): testa se o estado é diferente de OFFLINE</p>
+</li>
+</ul>
+<h4 id="book">Book</h4>
+<ul>
+<li>
+<p>bid: conjunto de ordens do lado da compra</p>
+</li>
+<li>
+<p>ask: conjunto de ordens do lado da venda</p>
+</li>
+<li>
+<p>state: enumerado com o estado do book, segundo a página 64
+    <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;ved=2ahUKEwit49OZkLDlAhXTCtQKHUlTDRkQFjABegQIAhAC&amp;url=http%3A%2F%2Fwww.b3.com.br%2Fdata%2Ffiles%2F76%2F42%2F6A%2F9B%2F4DA15610BE423F46AC094EA8%2FUMDF_MarketDataSpecification_v2.1.5.pdf&amp;usg=AOvVaw0-Vp2bWvXwst0nsz-7nW6O">desta</a>
+    documentação.</p>
+</li>
+<li>
+<p>sequence: sequencial do book. Id único da atualização mais recente
+    do book de ofertas</p>
+</li>
+<li>
+<p>name: nome do símbolo</p>
+</li>
+</ul>
+<p>Cada item do bid e ask tem os seguintes atributos:</p>
+<ul>
+<li>
+<p>price: preço da ordem</p>
+</li>
+<li>
+<p>quantity: quantidade da ordem</p>
+</li>
+<li>
+<p>detail: corretora</p>
+</li>
+<li>
+<p>order_id: SecondaryOrderID, definido pela Bolsa</p>
+</li>
+<li>
+<p>virtual_md_id: ID atribuído à ordem pelo neutrino</p>
+</li>
+</ul>
+<p>Para imprimir o topo do book é possível:</p>
+<pre><code class="language-python">print(instrument.bid[0].price)
+print(instrument.ask[0].price)
+</code></pre>
+<h4 id="trades">Trades</h4>
+<p>O acesso é feito por meio de indices. O valor máximo é determinado pelo
+parâmetro trade_buffer_size. Os atributos de cada item são:</p>
+<ul>
+<li>
+<p>trade_id: Id do trade na B3</p>
+</li>
+<li>
+<p>datetime: horário local quando o negócio foi executado</p>
+</li>
+<li>
+<p>price: preço do negócio</p>
+</li>
+<li>
+<p>quantity: quantidade do negócio</p>
+</li>
+<li>
+<p>buyer: contraparte compradora</p>
+</li>
+<li>
+<p>seller: contraparte vendedora</p>
+</li>
+<li>
+<p>status: é o agressor indicator enviado pela bolsa. Pode ser R(trade
+    de RLP), X(direto), -(trade iniciado pelo vendedor) e +(iniciado
+    pelo comprador)</p>
+</li>
+</ul>
+<h2 id="candles">Candles</h2>
+<p>O CandleRegister representa a estrutura que contem os candles
+para determinado ativo e as propriedades para sua construção como intervalo, tick, quantidade inicial de barras, entre outros.
+Estão disponíveis os candles do tipo stick e renko. A sua assinatura pode ser feita da maneira a seguir:</p>
+<h3 id="assinatura_1">Assinatura</h3>
+<p>A assinatura de um ativo pode ser feita por meio da funçao <em>add_bar:</em></p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>add_bar(&lt;symbol&gt;,bar_count=100, interval=1)</code></td>
+<td><p>Adiciona um novo candle do tipo stick, utilizando como argumentos:</p>
+<ul>
+<li><p>symbol: string com o nome do ativo a ser assinado, ex. 'WINQ19'</p></li>
+<li><p>bar_count: número de candles, default é 100.</p></li>
+<li><p>interval: intervalo para geração dos candles, default é 1 minuto. </p></li>
+</ul>
+<p>Devolve um objeto do tipo <em>CandleRegister.</em></p></td>
+</tr>
+<tr class="even">
+<td><code>add_interday_bar(&lt;symbol&gt;,bar_count=100, interval='D')</code></td>
+<td><p>Adiciona um novo candle do tipo <em>interday</em>, utilizando como argumentos:</p>
+<ul>
+<li><p>symbol: string com o nome do ativo a ser assinado, ex. 'WINQ19'</p></li>
+<li><p>bar_count: número de candles, default é 100</p></li>
+<li><p>interval: intervalos possíveis são dia 'D' (default), semana 'W' e mês 'M'</p></li>
+</ul>
+<p>Devolve um objeto do tipo <em>CandleRegister.</em></p></td>
+</tr>
+<tr class="odd">
+<td><code>add_renko(&lt;symbol&gt;,tick_count=2)</code></td>
+<td><p>Adiciona um novo candle do tipo renko, utilizando como argumentos:</p>
+<ul>
+<li><p>symbol: string com o nome do ativo a ser assinado, ex. 'WINQ19'</p></li>
+<li><p>tick_count: níveis de preço para cada tijolo, default é 2</p></li>
+<p>A quantidade de dias considerados para o histórico é 15.</p>
+</ul>
+<p>Devolve um objeto do tipo <em>CandleRegister.</em></p></td>
+</tr>
+</tbody>
+</table>
+
+<p><br>
+Por exemplo:</p>
+<pre><code class="language-python">from neutrino import market
+
+bar = market.add_bar(symbol, bar_count=100, interval=1)
+interday_bar = market.add_interday_bar(symbol, bar_count=10, interval='M')
+renko = market.add_bar(symbol, tick_count=5)
+</code></pre>
+<p>A assinatura de um instrumento e de barras são <strong>independentes</strong>, sendo
+que o usuário pode solicitar os candles de um determinado ativo usando a
+função <code>add_bar</code>, <code>add_interday_bar</code> ou <code>add_renko</code> sem ter adicionado o instrumento por meio do <code>add</code>.
+As atualizações de candle chegarão através da callback especificada para
+o <code>trade_callback</code> daquele instrumento ou no <code>on_data</code>, se nenhuma callback
+tiver sido especificado.</p>
+<h3 id="acesso_1">Acesso</h3>
+<p>O armazenamento do candle é responsabilidade do usuário, porém caso o
+objeto não tenha sido salvo, é possível recuperá-lo, utilizando a
+função <code>get_bar</code>, <code>get_interday_bar</code> ou <code>get_renko</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><code>get_bar(&lt;symbol&gt;,bar_count=100, interval=1)</code></p>
+<p><code>get_interday_bar(&lt;symbol&gt;,bar_count=100, interval='D')</code></p>
+<p><code>get_renko(&lt;symbol&gt;,bar_count=2)</code></p></td>
+<td><p>Recupera um candle previamente cadastrado usando como argumentos:</p>
+<ul>
+<li><p>symbol: string com o nome do ativo a ser assinado.</p></li>
+<li><p>bar_count: número de candles, default é 100.</p></li>
+<li><p>tick_count: níveis de preço para cada tijolo, default é 2.</p></li>
+<li><p>interval: intervalo para geração dos candles, default é 1 minuto ou 'D'.</p></li>
+</ul>
+<p>Caso não exista um candle usando a combinação dos argumentos anteriores <em>None</em> é devolvido<em>, </em>caso contrário o objeto do tipo <em>CandleRegister</em></p></td>
+</tr>
+</tbody>
+</table>
+
+<p><br>
+Por exemplo:</p>
+<pre><code class="language-python">self.bar_win = market.get_bar('WINQ19')
+self.bar_win_count_1000 = market.get_bar('WINQ19', bar_count=1000)
+self.bar_win_interval_5 = market.get_bar('WINQ19', interval=5)
+self.bar_win_interval_day = market.get_interday_bar('WINQ19', interval='D')
+self.renko_win_10 = market.get_renko('WINQ19', tick_count=10)
+</code></pre>
+<h3 id="atributos-e-metodos_1">Atributos e métodos</h3>
+<ul>
+<li>
+<p>open</p>
+</li>
+<li>
+<p>high</p>
+</li>
+<li>
+<p>low</p>
+</li>
+<li>
+<p>close</p>
+</li>
+<li>
+<p>timestamps</p>
+</li>
+<li>
+<p>quantity</p>
+</li>
+<li>
+<p>quantity_buy</p>
+</li>
+<li>
+<p>quantity_sell</p>
+</li>
+<li>
+<p>volume</p>
+</li>
+<li>
+<p>quantity_accumulated</p>
+</li>
+<li>
+<p>quantity_buy_accumulated</p>
+</li>
+<li>
+<p>quantity_sell_accumulated</p>
+</li>
+<li>
+<p>num_trades</p>
+</li>
+<li>
+<p>last_id</p>
+</li>
+<li>
+<p>ready()</p>
+</li>
+<li>
+<p>properties: objeto do tipo CandleProperties, que por sua vez possui:</p>
+<ul>
+<li>
+<p>tick_count: níveis de preço para cada tijolo</p>
+</li>
+<li>
+<p>bar_count: número de barras solicitadas</p>
+</li>
+<li>
+<p>interval: periodo do candle em minutos ou especificação 'D', 'W', 'M' para interday</p>
+</li>
+<li>
+<p>symbol: nome do ativo</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="desassinatura_1">Desassinatura</h3>
+<p>Para remover um candle utilize o objeto <code>CandleRegister</code> devolvido na
+criação do mesmo usando a função <code>remove_bar</code>, <code>remove_interday_bar</code> ou <code>remove_renko</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><code>remove_bar(&lt;bar&gt;)</code></p>
+<p><code>remove_interday_bar(&lt;bar&gt;)</code></p>
+<p><code>remove_renko(&lt;bar&gt;)</code></p></td>
+<td><p>Remove um candle. O <em>bar</em> deve ser um objeto válido devolvido pela assinatura de um candle ou obtido pelo método <em>get_bar. </em>A função retorna <em>True </em>em caso se sucesso, <em>False </em>caso contrário.</p>
+<p>O objeto <em>bar </em>passado como parâmetro é invalidado no sucesso da operação.</p></td>
+</tr>
+</tbody>
+</table>
+
+<p><br>
+Por exemplo:</p>
+<pre><code class="language-python">from utils import market
+
+bar = market.add_bar('PETR4')
+if market.remove_bar(bar):
+    print('success')
+</code></pre>
+<p>Ao remover a assinatura de um candle todos os indicadores atrelados a
+ele também são removidos.</p>
+<h2 id="indicadores">Indicadores</h2>
+<p>Os indicadores estão naturalmente vinculados a um candle. Sendo que, a
+sua assinatura deve usar um objeto candle:</p>
+<pre><code class="language-python">self.bar_winq19 = neutrino.market.add_bar(&quot;WINQ19&quot;)
+
+if self.bar_winq19.ready():
+
+self.sma_winq19 = self.bar_winq19.add_sma(bar_count=10,
+source=neutrino.IndicatorSource.OPEN)
+
+print(self.bar_winq19.ready(), self.sma_winq19.ready())
+# &gt;&gt; True, True
+</code></pre>
+<p>Caso usuário não reserve uma variável para salvar o indicador construído
+é fornecido o seguinte mecanismo de acesso:</p>
+<pre><code class="language-python">for indicator in self.bar_winq19.get_indicators():  # retorna iterador
+    print(&quot;Indicator &quot; + indicator.name + &quot; value: &quot; + str(indicator.values[-1]))
+</code></pre>
+<h3 id="indicadores-disponiveis">Indicadores disponíveis</h3>
+<p>O framework fornece os indicadores a seguir:</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Nome</strong></th>
+<th><strong>Assinatura</strong></th>
+<th><strong>Parâmetros</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SMA</td>
+<td><code>add_sma(bar_count=.., source=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>source: tipo de entrada (conferir seçao Source)</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>EMA</td>
+<td><code>add_ema(bar_count=.., source=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>source: tipo de entrada</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>MOM</td>
+<td><code>add_mom(bar_count=.., source=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>source: tipo de entrada</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>SAMOM</td>
+<td><code>add_samom(bar_count=.., source=..., sa_bar_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>source: tipo de entrada</p></li>
+<li><p>sa_bar_count: quantidade de barras utilizadas na média</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>TRANGE*</td>
+<td><code>add_trange()</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>SATR*</td>
+<td><code>add_satr(sa_bar_count=...)</code></td>
+<td><ul>
+<li><p>sa_bar_count: quantidade de barras utilizadas na média</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>ATR*</td>
+<td><code>add_atr(bar_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>ADX*</td>
+<td><code>add_atr(bar_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>SAADX*</td>
+<td><code>add_atr(bar_count=..., sa_bar_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>sa_bar_count: quantidade de barras utilizadas na média</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>PLUS_DI*</td>
+<td><code>add_plus_di(bar_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>MINUS_DI*</td>
+<td><code>add_minus_di(bar_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>BBANDS**</td>
+<td><code>add_bbands(bar_count=..., deviation_up=..., deviation_down=..., average=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>deviation_up:</p></li>
+<li><p>deviation_down:</p></li>
+<li><p>average: tipo de média utiliza (conferir seção Average)</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>SABBANDS**</td>
+<td><code>add_sabbands(bar_count=..., deviation_up=..., deviation_down=..., average=..., sa_bar_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>deviation_up:</p></li>
+<li><p>deviation_down:</p></li>
+<li><p>average: tipo de média utiliza (conferir seção Average)</p></li>
+<li><p>sa_bar_count: quantidade de barras utilizadas na média</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>STDDEV</td>
+<td><code>add_stddev(bar_count=.., source=..., deviation_count=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>source: tipo de entrada</p></li>
+<li><p>deviation_count:</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+<p><em>* source utilizado: high, low, close</em></p>
+<p><em>** source utilizado: close</em></p>
+<h3 id="acceso-aos-valores">Acceso aos valores</h3>
+<p>Os valores dos indicadores pode ser recuperado acessando o vetor de
+valores <em>values:</em></p>
+<pre><code class="language-python"># Acessando o valor do indicador mais recente
+self.sma = candle.add_sma(10)
+print(self.sma.values[-1])
+</code></pre>
+<p>No caso do BBANDS e SABBANDS os valores devem ser acessados pelo
+vetor <em>bands</em>:</p>
+<pre><code class="language-python"># Acessando o valor do indicador mais recente
+
+self.sabbands = candle.add_bbands(bar_count=10, deviation_up=5,
+deviation_down=5, average=IndicatorAverage.SMA, sa_bar_count=5)
+
+print(self.sabbands.bands[0][-1])
+print(self.sabbands.bands[1][-1]
+print(self.sabbands.bands[2][-1]
+</code></pre>
+<h3 id="atributos">Atributos</h3>
+<p>Um indicador ao ser assinado ou ser recuperado usando a função
+get_indicators, possui a seguinte lista de atributos:</p>
+<ul>
+<li>
+<p>values: lista com os valores do indicador</p>
+</li>
+<li>
+<p>bands: lista de 3 vetores com os valores para o BBANDS e SABBANDS</p>
+</li>
+<li>
+<p>last_id: id do valor de indicador atualizado mais recentemente</p>
+</li>
+<li>
+<p>name: nome do indicador (confira a coluna Nome na lista de
+    Indicadores disponíveis)</p>
+</li>
+<li>
+<p>properties: itens da coluna Parâmetros na lista de Indicadores
+    disponíveis</p>
+<ul>
+<li>
+<p>source</p>
+</li>
+<li>
+<p>bar_count</p>
+</li>
+<li>
+<p>sa_bar_count</p>
+</li>
+<li>
+<p>deviation_count</p>
+</li>
+<li>
+<p>deviation_up</p>
+</li>
+<li>
+<p>deviation_down</p>
+</li>
+<li>
+<p>average</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Todos os indicadores tem a lista anterior de atributos disponíveis
+independente do tipo de indicador.</p>
+<h4 id="source">Source</h4>
+<p>O argumento source para os indicadores é determinado pelo enumerado
+neutrino.IndicatorSource, podendo ter os valores:</p>
+<ul>
+<li>
+<p>NONE</p>
+</li>
+<li>
+<p>OPEN</p>
+</li>
+<li>
+<p>HIGH</p>
+</li>
+<li>
+<p>LOW</p>
+</li>
+<li>
+<p>CLOSE</p>
+</li>
+<li>
+<p>QUANTITY</p>
+</li>
+<li>
+<p>QUANTITY_SELL</p>
+</li>
+<li>
+<p>QUANTITY_BUY</p>
+</li>
+<li>
+<p>VOLUME</p>
+</li>
+<li>
+<p>QUANTITY_ACCUMULATED</p>
+</li>
+<li>
+<p>QUANTITY_SELL_ACCUMULATED</p>
+</li>
+<li>
+<p>QUANTITY_BUY_ACCUMULATED</p>
+</li>
+</ul>
+<h4 id="average">Average</h4>
+<p>O argumento average para os indicadores BBANDS e SABBANDS é determinado
+pelo enumador neutrino.IndicatorAverage, podendo ter os valores: </p>
+<ul>
+<li>
+<p>SMA</p>
+</li>
+<li>
+<p>EMA</p>
+</li>
+<li>
+<p>WMA</p>
+</li>
+</ul>
+<h3 id="desassinatura_2">Desassinatura</h3>
+<p>Para remover um indicador previamente criado é necessário ter acesso ao
+objeto a ser removido. Use a função <em>remove_indicator</em> que é um método
+do <em>CandleRegister.</em></p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>remove_indicator(&lt;indicator&gt;)</code></td>
+<td><p>Remove um indicador contido num candle. O <em>indicator</em> deve ser um objeto válido devolvido pela assinatura de um indicador ou obtido pelo método <em>get_indicators. </em>A função retorna <em>True </em>em caso se sucesso, <em>False </em>caso contrário.</p>
+<p>O objeto <em>indicator </em>passado como parâmetro é invalidado no sucesso da operação.</p></td>
+</tr>
+</tbody>
+</table>
+
+<p><br>
+No exemplo a seguir o objeto do indicador SMA é salvo e utilizado para
+sua remoção:</p>
+<pre><code class="language-python">from utils import market
+
+bar = market.add_bar('PETR4')
+sma = bar.add_sma(10)
+if bar.remove_indicator(sma):
+    print('success')
+</code></pre>
+<h2 id="callbacks_1">Callbacks</h2>
+<h3 id="callbacks-inicio-e-fim">Callbacks inicio e fim</h3>
+<p>A primeira callback da estrategia é initialize. Esta função é chamada
+pelo neutrino após contrastar os ativos listados no arquivo de
+configuração da estrategia com o security list recebido pelo marketdata.
+De modo que, toda estrategia deve iniciar o seu processamento com
+instruções dentro da callback initialize. O parâmetro symbols indica a
+lista de ativos dispníveis para uso. Este ativos correspondem ao mesmos
+especificados no arquivo de configuração da estrategia:</p>
+<pre><code class="language-json"># quantick.conf:
+
+&quot;Symbols&quot; : [ &quot;DI1F21&quot; , &quot;DI1F19&quot; , &quot;DI1F23&quot;],
+...
+</code></pre>
+<p>Considerando o arquivo anterior:</p>
+<pre><code class="language-python">def initialize(self, symbols)
+    print([s for s in symbols])
+</code></pre>
+<pre><code class="language-python"># &gt;&gt; ['DI1F21', 'DI1F19', 'DI1F23']
+</code></pre>
+<p>A API também permite implementar a callback <em>finalize</em> (não obrigatória)
+que é chamada quando a estratégia é terminada por qualquer motivo:</p>
+<pre><code class="language-python">def initialize(self, symbols):
+    neutrino.utils.quit()
+
+def finalize(self, reason):
+    print(&quot;finalize:&quot; + str(reason))
+</code></pre>
+<h4 id="quitreason">QuitReason</h4>
+<p>O neutrino sinaliza que a estrategia vai encerrar chamando a callback
+finalize. O parâmetro reason indica o motivo do encerramento. Os valores
+para o QuitReason são:</p>
+<ul>
+<li>
+<p>USER_QUIT: o usuário usou a chamada neutrino.utils.quit() ou usando
+    CTRL+C</p>
+</li>
+<li>
+<p>ALGOMAN_QUIT: o Algoman enviou o comando Abort</p>
+</li>
+<li>
+<p>NO_MD_CONNECTION: perda de conexão com a fonte de dados de mercado
+    (Relay)</p>
+</li>
+<li>
+<p>NO_FRONTEND_CONNECTION: perda de conexão com o frontend</p>
+</li>
+<li>
+<p>BAD_FD: falha na comunicação do neutrino com OMS ou Algoman ou Relay</p>
+</li>
+<li>
+<p>INVALID_PROTOCOL: pacote de dados recebido é inválido</p>
+</li>
+<li>
+<p>OUT_OF_SYNC: a estrategia não consegue sincronizar após 10
+    tentativas</p>
+</li>
+<li>
+<p>NO_OMS_CONNECTION: sem conexão com o OMS</p>
+</li>
+</ul>
+<h3 id="callback-default-book-trade-e-candles">Callback default, book, trade e candles</h3>
+<p>O controle do volume de notificações recebidas é feito em parte pelo
+próprio usuário. Basicamente a função on_data será disparada pelo
+Neutrino pela mudanca de book ou trades:</p>
+<ul>
+<li>
+<p>No caso do book duas opções de atualização podem ser notificadas:
+    bid e ask.</p>
+</li>
+<li>
+<p>No caso de trades, entende-se que os candles e indicadores também
+    tem sido atualizados</p>
+</li>
+<li>
+<p>Quando acontecer a virada do periodo sem ter acontecido algum
+    negocio o Neutrino notifica atualização dos candles/indicadores</p>
+</li>
+</ul>
+<p>A callback default on_data tem como parâmetro a estrutura update, tendo
+como membros os campos a seguir:</p>
+<ul>
+<li>
+<p>symbol: nome do ativo atualizado e motivo da chamada da callback</p>
+</li>
+<li>
+<p>reason: vetor com a lista de acontecimentos motivo da chamada da
+    callback</p>
+</li>
+<li>
+<p>bid_count: número de atualizações por parte do bid</p>
+</li>
+<li>
+<p>ask_count: número de atualizações por parte do ask</p>
+</li>
+<li>
+<p>trade_count: número de trades</p>
+</li>
+<li>
+<p>status_changed:</p>
+</li>
+</ul>
+<p>O campo reason é um vetor ordenado levando em consideração como maior
+prioridade o acontecimento de um trade e a seguir o lado do book com
+maior quantidade de atualizações. Por exemplo se existiram negocios e
+além disso bid_count > ask_count, então:</p>
+<pre><code class="language-python">def on_data(self, update)
+    print(update.symbol + ' - ' + ','.join(str(r) for r in update.reason))
+</code></pre>
+<pre><code class="language-python"># &gt;&gt; WINQ19 - TRADES, BID_SIDE, ASK_SIDE
+</code></pre>
+<p>No exemplo a seguir o usuário assina book, trades, candle e indicadores
+para dois ativos diferentes. As mudanças são recebidas pelo on_data e o
+próprio usuário é responsável por determinar o tratamento de cada uma
+das opções possíveis:</p>
+<pre><code class="language-python">from neutrino import *
+
+def initalize(self)
+    market.add_book(&quot;WINQ19&quot;)
+    market.add_book(&quot;PETR4&quot;)
+    self.winq_book = market.get_book(&quot;WINQ19&quot;)
+    self.petr_book = market.get_book(&quot;PETR4&quot;)
+    self.winq_candle = market.add_bar(&quot;WINQ19&quot;, interval=1)
+    self.petr_candle = market.add_bar(&quot;PETR4&quot;, interval=5)
+    self.winq_candle.add_sma(bar_count=5)
+    self.petr_candle.add_sma(bar_count=10)
+    self.petr_candle.add_adx()
+
+def on_data(self, update):
+    if &quot;PETR4&quot; in update.symbol:
+        self.on_petr_data(update)
+    if &quot;WINQ19&quot; in update.symbol:
+        self.on_winq_data(update)
+
+def on_petr_data(self, update):
+    if UpdateReason.BID_SIDE in update.reason:
+        self.on_petr_bid(update)
+    if UpdateReason.ASK_SIDE in update.reason:
+        self.on_petr_ask(update)
+    if UpdateReason.TRADE in update.reason or \
+        UpdateReason.NEW_BAR in update.reason:
+        self.on_petr_candle(update)
+
+def on_winq_data(self, update):
+    if UpdateReason.BID_SIDE in update.reason:
+        self.on_winq_bid()
+    if UpdateReason.ASK_SIDE in update.reason:
+        self.on_winq_ask()
+    if UpdateReason.TRADES in update.reason or \
+        UpdateReason.NEW_BAR in update.reason:
+        self.on_winq_candle()
+</code></pre>
+<p>O framework permite também excluir a callback default de modo que as
+estruturas assinadas são atualizadas, porém não existe notificação deste
+acontecimento. Por exemplo, podem ser assinados book e trades porém o
+book será só consultado quando um trade acontecer. Para ter este efeito
+é possível anular a callback do book:</p>
+<pre><code class="language-python">def initalize(self)
+    market.add(&quot;PETR4&quot;, book_callback=None)
+    self.petr_book = market.get(&quot;PETR4&quot;).book
+    self.petr_trades = market.get(&quot;PETR4&quot;).trades
+
+def on_data(self, update):
+    # Imprime o último trade e o topo do book a cada novo negócio
+    print(self.petr_trades[-1])
+    print(self.petr_book.bid[0])
+    print(self.petr_book.ask[0])
+</code></pre>
+<h4 id="candle-vazio">Candle Vazio</h4>
+<p>Quando um candle de um determinado intervalo for inicializado pela
+passagem do tempo, antes de acontecer algum negócio naquele período, a
+callback de candles é chamada usando o UpdateReason.NEW_BAR, contendo um
+candle com os valores OLHC do candle anterior. Neste caso a callback de
+trade não é ativada.</p>
+<h4 id="direto">Direto</h4>
+<p>No caso de sair um 'direto' a callback de book não é ativada somente a
+callback de trade e candle.</p>
+<h2 id="utilitarios">Utilitários</h2>
+<p>Funções não relacionadas diretamente à assinaturas de candle/instrumento
+ou controle de ordens e posição ficam dentro do módulo <em>utils</em>. Neste
+módulo existem as funções a seguir:</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>notify(&lt;text&gt;)</code></td>
+<td><p>Envia uma mensagem de no máximo 200 caracteres para o AlgoMan o qual deverá notificar o frontend. A função retorna False se a string de entrada ultrapassa a quantidade de caracteres permitida ou o envio é falho, retorna True no caso sucedido.</p>
+<p>text: string com até 200 caracteres. </p></td>
+</tr>
+<tr class="even">
+<td><code>now()</code></td>
+<td>Devolve o UNIX timestamp</td>
+</tr>
+<tr class="odd">
+<td><code>quit()</code></td>
+<td>Finaliza a estrategia chamando a callback de <em>finalize</em> com o valor <em>reason=USER_QUIT</em></td>
+</tr>
+<tr class="even">
+<td><code>by_price(side=&lt;book_side&gt;, depth=&lt;max_rows&gt;)</code></td>
+<td>Agrupa o book por preço de usando como entrada o <em>lado</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> Se <em>depth é </em>0 o book inteiro é agrupado, caso contrário o book é agrupado até gerar no máximo <em>max_rows</em> como saída.</td>
+</tr>
+</tbody>
+</table>
+
+<p><br></p>
+<h2 id="scheduler">Scheduler</h2>
+<p>O usuário tem a possibilidade de cadastrar uma função para ser executada
+de acordo com um horário específico ou a cada certo intervalo. Estas
+funções encontram-se dentro do módulo <em>utils</em>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>at(function=..., hour=.., minute=...)</code></td>
+<td>Agenda a função <em>function </em>para ser executada a determinada hora, com precisão de hora e minute. No caso de parâmetros inválidos de hora ([0-23]) e minuto ([0-59]) a função retorna None, caso contrário um objeto do tipo <em>ScheduledFunction</em> é devolvido.</td>
+</tr>
+<tr>
+<td><code>every(function=...,interval=\&lt;seconds.ms\&gt;)</code></td>
+<td>Agenda a função <em>function </em>para ser executada com determinado intervalo. Intervalo mínimo de 0.250 s. No caso de parâmetros inválidos de intervalo (\&lt; 0.250 s) a função retorna None, caso contrário um objeto do tipo <em>ScheduledFunction</em> é devolvido.</td>
+</tr>
+<tr>
+<td><code>get_functions()</code></td>
+<td>Retorna uma lista com todas as funções agendadas</td>
+</tr>
+<tr>
+<td><code>remove_function(function)</code></td>
+<td>Remove a função <em>function. </em>Caso <em>function</em> não exista a função retorna <em>False,</em> <em>True</em> caso contrário.</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+No exemplo a seguir, a funçao <em>opening </em>será executada as 10:00h e a
+função <em>check</em> será executada a cada 0.5s:</p>
+<pre><code class="language-python">from neutrino import utils
+opening_event = utils.at(self.opening, 10, 00)
+check_event = utils.every(self.check, 0.5)
+
+</code></pre>
+<p>Também é possível recuperar e remover as funções agendadas, assim como
+os outros callbacks registrados pelo usuário. Neste exemplo, o usuário
+remove os eventos agendados um a um:</p>
+<pre><code class="language-python">from neutrino import utils
+
+function = utils.get_functions()
+for function in functions:
+    utils.remove_function(function)
+
+</code></pre>
+<p>Lembre-se que:</p>
+<ul>
+<li>
+<p>ao adicionar um evento no scheduler a callback default <em>on_data</em>
+    assim como todas as callbacks cadastradas pelo usuário continuam
+    sendo executadas normalmente;</p>
+</li>
+<li>
+<p>as funções agendadas pelo utils.at são excluídas logo após serem
+    executadas.</p>
+</li>
+<li>
+<p>no caso de tentar inserir um agendamento repetido, isto é o mesmo
+    para horario/intervalo - função, o objeto ja existente é devolvido.</p>
+</li>
+<li>
+<p>o agendamento não suporta funções sobrecarregadas, pois o nome da
+    função é usado para indexar os agendamentos internamente. </p>
+</li>
+</ul>
+<h3 id="atributos_1">Atributos</h3>
+<p>Ao agendar uma função um objeto do tipo <em>ScheduledFunction</em> é devolvido.
+Ele possui os seguintes atributos:</p>
+<ul>
+<li>
+<p>function: objeto python apontando para a função que será executada</p>
+</li>
+<li>
+<p>hour: hora do agendamento no formato 24h</p>
+</li>
+<li>
+<p>minute: minuto do agendamento</p>
+</li>
+<li>
+<p>interval: intervalo em segundos com precisao de 3 casas decimais.</p>
+</li>
+</ul>
+<p>Caso o agendamento seja feito usando <em>at, </em>o campo <em>interval </em>é igual a
+zero. No caso de ter usado a <em>every</em> os campos <em>hour</em> e <em>minute</em> são
+iguais a zero.</p>
+<h2 id="summaryline">SummaryLine</h2>
+<p>O <code>SummaryLine</code> é uma estrutura que contém dados operacionais sobre determinado ativo. Por meio dele é possível consultar o topo do book, último trade, estatísticas, entre outros. Este conjunto de informações visa reduzir o tráfego para o neutrino evitando, por exemplo, assinar o book de certo ativo para conhecer o último preço de negociação. O SummaryLine é enviado ao neutrino a cada 200 ms. A tabela a seguir detalha a os campos desta estrutura:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code></td>
+<td>Nome do símbolo assinado</td>
+</tr>
+<tr>
+<td><code>bid</code></td>
+<td>Estrutura <code>BookEntry</code> que indica o topo do lado da compra</td>
+</tr>
+<tr>
+<td><code>ask</code></td>
+<td>Estrutura <code>BookEntry</code> que indica o topo do lado da venda</td>
+</tr>
+<tr>
+<td><code>last_trade</code></td>
+<td>Estrutura <code>TradeEntry</code> com informações do último negocio executado</td>
+</tr>
+<tr>
+<td><code>stats</code></td>
+<td>Estruturas <code>SummaryLineStats</code> com informações estatísticas:<ul><li>trade_volume</li><li>high</li><li>low</li><li>vwap</li><li>opening</li><li>closing</li><li>theo</li><li>settlement</li><li>imbalance</li><li>last</li></ul></td>
+</tr>
+<tr>
+<td><code>tunnels</code></td>
+<td>Estrutura <code>SummaryLineTunnels</code> com informações sobre tunnels:<ul><li>hard_limit</li><li>auction_limit</li><li>rejection_band</li><li>static_limit</li></ul></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Estrutura <code>StatusEntry</code> com informações sobre o estado do book</td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<table>
+<thead>
+<tr>
+<th>Campo de BookEntry</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>price</td>
+<td></td>
+</tr>
+<tr>
+<td>quantity</td>
+<td></td>
+</tr>
+<tr>
+<td>detail</td>
+<td></td>
+</tr>
+<tr>
+<td>order_id</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<table>
+<thead>
+<tr>
+<th>Campo de TradeEntry</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>price</td>
+<td></td>
+</tr>
+<tr>
+<td>quantity</td>
+<td></td>
+</tr>
+<tr>
+<td>buyer</td>
+<td></td>
+</tr>
+<tr>
+<td>seller</td>
+<td></td>
+</tr>
+<tr>
+<td>datetime</td>
+<td></td>
+</tr>
+<tr>
+<td>status</td>
+<td>'+' compra, '-' venda, 'x' cross</td>
+</tr>
+<tr>
+<td>trade_id</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<table>
+<thead>
+<tr>
+<th>Campo de StatisticsEntry</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>price</td>
+<td></td>
+</tr>
+<tr>
+<td>quantity</td>
+<td></td>
+</tr>
+<tr>
+<td>longnum</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<table>
+<thead>
+<tr>
+<th>Campo de TunnelEntry</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>low_price</td>
+<td></td>
+</tr>
+<tr>
+<td>high_price</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<table>
+<thead>
+<tr>
+<th>Campo de StatusEntry</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>status</td>
+<td>17: open</td>
+</tr>
+<tr>
+<td>open_trade_time</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p></br></p>
+<h3 id="assinatura_2">Assinatura</h3>
+<p>Para assinar um <code>SummaryLine</code> use a função add_summary e especifique o nome do ativo e callback opcionalmente. A assinatura de um <code>SummaryLine</code> não está vinculada à assinatura de um <code>InstrumentRegister</code>, de modo que é possível assinar o SummaryLine de múltiplos ativos sem sequer ter assinado o book de algum deles.</p>
+<table>
+<thead>
+<tr>
+<th>Função</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add_summary(&lt;symbol&gt;, summary_callback=on_data)</code></td>
+<td>Adiciona um SummaryLine, usando como argumentos:<ul><li>symbol: string com o nome do ativo a ser assinado, ex. 'WINQ19'</li><li>summary_callback: callback a ser disparada na notificação de recepção de SummaryLine</li>ntidos no buffer a cada notificação</ul>Um objeto do tipo SummaryLine é devolvido no caso de sucesso. Caso o símbolo não seja válido, <code>None</code> é devolvido.</td>
+</tr>
+</tbody>
+</table>
+<p>O argumento <code>summary_callback</code> por padrão é a callback <code>on_data</code> porém pode ser customizada. Em ambos casos, a callback recebe como argumento um objeto do tipo <code>Update</code>. Se a callback para o <code>SummaryLine</code> é chamada, o vetor <code>reason</code> deste objeto contém um elemento com valor <code>BookUpdateReason.SUMMARY_LINE</code>.</p>
+<p></br>
+Por exemplo:</p>
+<pre><code class="language-python">from neutrino import market
+
+# Uso de callback customizadas
+self.win_summary = market.add_summary(
+    'WINQ19',
+    summary_callback=on_summary)
+</code></pre>
+<h3 id="acesso_2">Acesso</h3>
+<p>Para recuperar uma objeto <code>SummaryLine</code> use a funcao <code>get_summary</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Função</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_summary(&lt;symbol&gt;)</code></td>
+<td>Use como argumento a string com o nome do ativo a ser assinado, ex. 'WINQ19'. Uma objeto do tipo <code>SummaryLine</code> é devolvido ou <code>None</code> caso o símbolo seja inválido ou não possua assinatura</td>
+</tr>
+</tbody>
+</table>
+<p></br>
+Por exemplo:</p>
+<pre><code class="language-python">from neutrino import market
+
+self.win_summary = market.get_summary('WINQ19')
+print(self.win_summary.stats.high.price)
+</code></pre>
+<h3 id="desassinatura_3">Desassinatura</h3>
+<p>Para desassinar o <code>SummaryLine</code> use a funcao <code>remove_summary</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Função</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>remove_summary(summary)</code></td>
+<td>Use como argumento um objeto <code>SummaryLine</code> existente obtido pelo retorno das funções <code>add_summary</code> ou <code>get_summary</code>. Se objeto fornecido como parâmetro é inválido a função retorna <code>False</code>, <code>True</code> caso sucesso</td>
+</tr>
+</tbody>
+</table>
+<p></br>
+Por exemplo:</p>
+<pre><code class="language-python">from neutrino import market
+
+self.win_summary = market.add_summary('WINQ19')
+success = market.remove_summary(self.win_summary)
+</code></pre>
+<h2 id="controle-de-recursos">Controle de recursos</h2>
+<p>O usuário pode requisitar múltiplos recursos do sistema como memoria,
+disco e CPU. Este acesso pode ser feito diretamente invocando as
+próprias funções do Python, por exemplo abrindo um arquivo e salvando
+nele quantidades absurdas de dados. Ou o acesso pode ser feito usando as
+funções deste framework, por exemplo solicitando um buffer gigante para
+armazenar os trades.</p>
+<p>Como ambas situações citadas acima geram risco, o Quantick deve deter o
+processo que ultrapasse os limiares seguros para funcionamento, auxiliando
+o controle dos recursos. Deste modo, o framework controla:</p>
+<ul>
+<li>
+<p>Tamanho máximo dos buffers para book, trades e candles: quantidade
+    de barras, entradas de book e trades disponíveis para o usuário.</p>
+</li>
+<li>
+<p>Quantidade máxima de candles asssinados.</p>
+</li>
+<li>
+<p>Quantidade máxima de indicadores assinados.</p>
+</li>
+<li>
+<p>Quantidade máxima de callbacks assinadas.</p>
+</li>
+<li>
+<p>Quantidade máxima de ativos.</p>
+</li>
+<li>
+<p>Frequencia máxima das callbacks.</p>
+</li>
+<li>
+<p>Limite de intervalos para os candles e indicadores.</p>
+</li>
+<li>
+<p>Restringir o range de dados usados nos indicadores. e.g O tamanho da
+    janela no moving average determina o custo em CPU do cálculo de
+    indicador.</p>
+</li>
+<li>
+<p>Data limite para a assinatura dos candles.</p>
+</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../orders/" class="btn btn-neutral float-right" title="Orders Routing API">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Primeiros passos"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../orders/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

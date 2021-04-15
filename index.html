@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>quantick/neutrino</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Primeiros passos";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> quantick/neutrino</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href=".">Primeiros passos</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#preparando-o-ambiente-local">Preparando o ambiente local</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#arquivos-de-configuracao">Arquivos de configuração</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#market-data">Market Data</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#order-routing">Order Routing</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#rodando-estrategias-no-docker">Rodando estratégias no Docker</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="mktdata/">Market Data API</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="orders/">Orders Routing API</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">quantick/neutrino</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Primeiros passos</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="neutrino-api">Neutrino API</h1>
+<p>O neutrino é uma API em Python para implementar estratégias de algotrading no mercado brasileiro. Ela dá acesso à uma engine desenvolvida em C++ que cuida de todas as interações com a B3 e está divida nos seguintes conjuntos:</p>
+<ul>
+<li>Estruturas de análise: book, trades (ticks), candles e indicadores</li>
+<li>Funções de configuração</li>
+<li>Callbacks</li>
+</ul>
+<p>O acesso à estes conjuntos é feito pelos objetos <code>market</code>, <code>utils</code>, <code>oms</code> e <code>position</code>. A API também realiza alguns callbacks para seu código em Python quando certos eventos ocorrem. Portanto, você pode implementar os métodos abaixo:</p>
+<ul>
+<li><code>initialize</code> (obrigatório)</li>
+<li><code>on_data</code> (opcional)</li>
+<li><code>order_update</code> (obrigatório se estratégia enviar ordens)</li>
+<li><code>order_filled</code> (opcional)</li>
+<li><code>set_parameters</code> (obrigatório se rodar pelo Quantick)</li>
+<li><code>get_parameters</code> (obrigatório se rodar pelo Quantick)</li>
+<li><code>finalize</code> (opcional)</li>
+</ul>
+<h2 id="preparando-o-ambiente-local">Preparando o ambiente local</h2>
+<p>Para preparar seu ambiente para testar o neutrino localmente você precisa
+ clonar <a href="https://github.com/onesoftsa/neutrino-devel">este</a> repositório,
+ instalar o Docker e o Make na sua máquina (se estiver usando windows, pode
+ querer fazer isso usando o <a href="https://chocolatey.org/packages/make">chocolatery</a>).
+ Depois, preencha o arquivo <code>scripts/credentials.yml</code> seguindo o arquivo
+ exemplo disponível na mesma pasta. Finalmente, inicie o Docker e use os
+ comandos abaixo. Isso iniciará uma estratégia demo para testar o ambiente.
+ Pressione <code>Ctrl+A D</code> para terminar.</p>
+<pre><code class="language-shell">$ make docker-build
+$ make example
+</code></pre>
+<p>Para instalar diferetes módulos do Python para serem utilizadas dentro de suas
+ estratégias, inicie a imagem base do docker e instale os pacotes desejados
+ utilizando o <code>pip</code>.</p>
+<pre><code class="language-shell">$ make base-env
+$ pip3.7 install [PACKAGE NAME]
+</code></pre>
+<p>Antes de terminar o container atual, inicie outro terminal e siga <a href="https://phoenixnap.com/kb/how-to-commit-changes-to-docker-image">estas</a>
+ instruções para comitar as mudanças que você fez  como uma nova imagem. Assim
+ você pode voltar a utilizá-la mais tarde, sem precisar reinstalar os módulos
+ novamente.</p>
+<pre><code class="language-shell">$ docker ps -a
+$ docker commit [CONTAINER_ID] neutrino-1
+$ doker image
+</code></pre>
+<p>Finalmente, termine o ambiente que utilizou para fazer as instalações utilizando
+ <code>Ctrl+A D</code> e inicie um novo container para testar suas estratégias.</p>
+<pre><code class="language-shell">$ make neutrino-env
+</code></pre>
+<h2 id="arquivos-de-configuracao">Arquivos de configuração</h2>
+<h3 id="market-data">Market Data</h3>
+<p>O arquivo de configuração determina os parâmetros para execução do Neutrino. O formato do arquivo é JSON, confira um exemplo:</p>
+<pre><code class="language-json">{
+   &quot;Algorithm&quot; : &quot;python&quot;,
+   &quot;CPUMask&quot; : 15,
+   &quot;ExecutionClient&quot; : &quot;XBMF.conf&quot;,
+   &quot;MDChannel&quot; : &quot;&lt;IP&gt;:&lt;PORTA&gt;&quot;,
+   &quot;PID&quot; : 0,
+   &quot;Parent&quot; : 0,
+   &quot;FrontendIdleTimeout&quot;: 60,
+   &quot;pos&quot;: {
+      &quot;DI1F21&quot;: {
+         &quot;net&quot;: -5,
+         &quot;net_price&quot;: 0.025
+      }
+   },
+   &quot;Symbols&quot; : [ &quot;DOLM18&quot; ],
+   &quot;class&quot; : &quot;SimpleCorpOrder&quot;,
+   &quot;import&quot; : &quot;algo_modules&quot;
+}
+</code></pre>
+<p>Onde os parâmetros disponíveis são:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Nome</strong></th>
+<th><strong>Descrição</strong></th>
+<th><strong>Valores</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Algorithm</td>
+<td>Tipo de algoritmo</td>
+<td>"python", "corporate"</td>
+</tr>
+<tr>
+<td>Symbol</td>
+<td>Lista dos nomes dos ativos</td>
+<td>array de strings</td>
+</tr>
+<tr>
+<td>StrictRisk</td>
+<td>Se e somente se o simbolo de uma ordem não tenha uma configuração de risco, esse parâmetro configura se tal ordem será bloqueada ou não. Se "true": bloqueia (strict). Se "false": aceita.</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>pos</td>
+<td>A chave é o nome do ativo e o valor é um dict composto por <code>net</code> e <code>net_price</code>, onde o primeiro termo se refere à posição atual no instrumento e net_price o seu preço médio.</td>
+<td>dict</td>
+</tr>
+<tr>
+<td>CPUMask</td>
+<td>Máscara usada pelo taskset para determinar alocação de CPU pelo sistema operacional</td>
+<td>int</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>Process ID atribuido pelo sistema operacional e preenchido pelo AlgoMan</td>
+<td>int</td>
+</tr>
+<tr>
+<td>FrontendIdleTimeout</td>
+<td>imeout para interação com o frontend. Sem comunicação com o frontend além do timeout a estrategia é encerrada. Se o valor igual a zero, esta validação não é feita</td>
+<td>int</td>
+</tr>
+<tr>
+<td>ExecutionClient</td>
+<td>Caminho para o arquivo com a configuração do cliente de ordens</td>
+<td>string</td>
+</tr>
+<tr>
+<td>class</td>
+<td>Nome do classe do algoritmo</td>
+<td>string</td>
+</tr>
+<tr>
+<td>import</td>
+<td>Pasta com os algoritmos</td>
+<td>string</td>
+</tr>
+<tr>
+<td>MDChannel</td>
+<td>IP e porta do Relay</td>
+<td>string, no formato <code>&lt;IP&gt;:&lt;porta&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p><br/>
+Para que este arquivo seja gerado corretamente, a estratégia deve ser cadastrada através do Admin com o atributo Classe no formato python:<code>&lt;import&gt;:&lt;class&gt;</code> e o atributo name como <code>&lt;class&gt;</code>.</p>
+<h3 id="order-routing">Order Routing</h3>
+<p>O arquivo de configuração determina os parâmetros para execução do
+Neutrino relacionados ao envio de ordens. Segue o exemplo:</p>
+<pre><code class="language-shell">port = 14006
+user = neutrino
+password = neutrino
+account = DEMO
+exchange = XBMF
+prefix = XBMF.
+report-delay = 500
+</code></pre>
+<p>Onde os parâmetros disponíveis são:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Nome</strong></th>
+<th><strong>Descrição</strong></th>
+<th><strong>Valores</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>port</td>
+<td>porta DTC do OMS</td>
+<td>int</td>
+</tr>
+<tr>
+<td>user</td>
+<td>nome de usuário para conexão com o OMS</td>
+<td>string</td>
+</tr>
+<tr>
+<td>password</td>
+<td>senha do usuário para conexão com o OMS</td>
+<td>string</td>
+</tr>
+<tr>
+<td>account</td>
+<td>conta para envio de ordens</td>
+<td>string</td>
+</tr>
+<tr>
+<td>exchange</td>
+<td></td>
+<td>string</td>
+</tr>
+<tr>
+<td>prefix</td>
+<td>prefixo utilizado no client order id das ordens enviadas</td>
+<td>string</td>
+</tr>
+<tr>
+<td>report-delay</td>
+<td>Indica qual deve ser o tempo de delay da simulação. Caso seja colocado um valor negativo o código interpreta como valor de delay 0.</td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h2 id="rodando-estrategias-no-docker">Rodando estratégias no Docker</h2>
+<p>No repositório <a href="https://github.com/onesoftsa/neutrino-devel">neutrino-devel</a>,
+ inclua a pasta com os arquivos relacionados à estratégia que quiser testar na
+ pasta <code>strats/</code> e preencha o arquivo <code>scripts/confs/strastlist.yml</code> com um
+ alias para sua estratégia (que utilizará com outro script), o nome da pasta
+ onde os arquivos estão e o nome da classe que será importada pelo neutrino,
+ conforme modelo na pasta <code>scripts/confs/</code>. Depois disso, navegue para a pasta
+ raiz do repositório (onde fica o README) e rode:</p>
+<pre><code class="language-shell">$ python scripts/create_algo.py -a &lt;ALIAS&gt; -id &lt;ID para usar na pasta&gt; -i &lt;INSTRUMENTO PARA TESTAR&gt;
+$ make neutrino-env
+</code></pre>
+<p>Já dentro do docker, rode:</p>
+<pre><code class="language-shell">$ cd ~/onesoft/algos/algo&lt;ID&gt;
+$ neutrinov4 -c &lt;ARQUIVO DA PASTA&gt;.conf
+</code></pre>
+<p>Isso iniciará o <code>neutrino</code> em modo de simulação, utilizando dados em tempo
+ real, e chamará os callbacks para sua estratégia todo evento de book ou
+ negócio. Para testar os comandos que implementar, digite em um novo console:</p>
+<pre><code class="language-shell"> $ cd ~/onesoft/algos/algo&lt;ID&gt;
+ $ controller &lt;ID&gt;
+ $   set &lt;NOME ESTRATÉGIA&gt; comandos-em-formato-json-aqui
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mktdata/" class="btn btn-neutral float-right" title="Market Data API">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="mktdata/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.1.2
+Build Date UTC : 2021-04-15 13:40:54.759163+00:00
+-->

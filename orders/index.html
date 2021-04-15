@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Orders Routing API - quantick/neutrino</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Orders Routing API";
+    var mkdocs_page_input_path = "orders.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> quantick/neutrino</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Primeiros passos</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mktdata/">Market Data API</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Orders Routing API</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#oms">OMS</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#orderentry">OrderEntry</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#propriedades">Propriedades</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#enumerados">Enumerados</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#metodos">Métodos</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#envio-de-ordens">Envio de ordens</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gerenciamento-do-wait">Gerenciamento do WAIT</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#callback-de-ordens">Callback de Ordens</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#consulta-de-ordens">Consulta de Ordens</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#controle-de-risco">Controle de Risco</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#controle-de-posicao">Controle de Posição</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">quantick/neutrino</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Orders Routing API</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="order-routing-api">Order Routing API</h1>
+<p>O controle de ordens está estruturado nos módulos a seguir:</p>
+<ul>
+<li>
+<p><em>oms</em>: contem as funcionalidades para gerenciamento de ordens</p>
+</li>
+<li>
+<p><em>position</em>: gerencia a posição do usuário</p>
+</li>
+<li>
+<p><em>risk</em>: apresenta o risco configurado</p>
+</li>
+</ul>
+<h2 id="oms">OMS</h2>
+<p>O módulo <em>oms</em> contem todas as transações (de todos os ativos e tipos) e
+os respectivos assessores para sua manipulação. Esse objeto será o
+responsável por guardar os estados das transações de ordens e sinalizar
+o algoritmo à cada mudança.</p>
+<p>O objeto que representa uma ordem é denominado OrderEntry. Um objeto
+deste tipo contém todas as informações que descrevem o estado atual da
+ordem e suas propriedades. Do mesmo modo, fornece certos métodos para
+facilitar a sua análise e modificacação</p>
+<h4 id="orderentry">OrderEntry</h4>
+<p>Uma ordem está definida pelo objeto <em>OrderEntry</em> o qual possui as
+seguintes propriedades e funções:</p>
+<h5 id="propriedades">Propriedades</h5>
+<table>
+<thead>
+<tr>
+<th><strong>Nome da propriedade</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unique_id</td>
+<td>Número inteiro identificador único da ordem gerado pelo neutrino para auxiliar o programador. Esse id se mantém o mesmo durante toda a vida da ordem e não faz referência ao "OrderID" gerado pela bolsa</td>
+</tr>
+<tr>
+<td>side</td>
+<td>Enumerado do tipo <em>Side</em> (Será descrito abaixo) e indica se é uma ordem de compra ou venda.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Enumerado do tipo <em>OrderType</em> (Será descrito abaixo) que indica o tipo da ordem (<em>Limite, Mercado</em> ou <em>Start/Stop).</em></td>
+</tr>
+<tr>
+<td>time_in_force</td>
+<td>Enumerado do tipo <em>TimeInForce</em> (Será descrito abaixo) que representa o Campo 59 do FIX (a validade da ordem - Dia, VAC ou GTD).</td>
+</tr>
+<tr>
+<td>status</td>
+<td>Enumerado do tipo <em>OrderStatus</em> (será descrito abaixo) que é a combinação entre os campos 39 e 150 do FIX.</td>
+</tr>
+<tr>
+<td>price</td>
+<td>Valor numérico que representa o preço Limite da ordem.</td>
+</tr>
+<tr>
+<td>last_price</td>
+<td>Valor numérico que representa o preço da última execução.</td>
+</tr>
+<tr>
+<td>trigger_price</td>
+<td>Valor numérico que representa o preço de gatilho da ordem (caso a ordem não seja de gatilho, será zero).</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>Valor numérico que representa o quantidade original da ordem.</td>
+</tr>
+<tr>
+<td>last_quantity</td>
+<td>Valor numérico que representa o quantidade executada na transação atual.</td>
+</tr>
+<tr>
+<td>filled_quantity</td>
+<td>Valor numérico que representa o quantidade total executada.</td>
+</tr>
+<tr>
+<td>leaves_quantity</td>
+<td>Valor numérico que representa o quantidade ainda disponível no book.</td>
+</tr>
+<tr>
+<td>transact_time</td>
+<td>Valor numérico que representa o timestamp da interação de ordem.</td>
+</tr>
+<tr>
+<td>account</td>
+<td>String contendo a conta para a qual a estratégia está operando.</td>
+</tr>
+<tr>
+<td>symbol</td>
+<td>String com o nome do contrato.</td>
+</tr>
+<tr>
+<td>client_order_id</td>
+<td>String com o campo 11 do FIX que representa o <em>id</em> da transação. Esse <em>id</em> será gerenciado pelo Neutrino. **</td>
+</tr>
+<tr>
+<td>original_client_order_id</td>
+<td>String com o campo 41 do FIX que representa o <em>client_order_id</em> da transação anterior. Também será gerenciado pelo Neutrino.</td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>String com o campo 37 do FIX que representa o <em>id</em> único da ordem atribuído pela <em>Bolsa,</em> e por isso mesmo só será preenchido em ordens que foram confirmadas, caso contrário será vazio.</td>
+</tr>
+<tr>
+<td>secondary_order_id</td>
+<td>String com o <em>id</em> da oferta no book de ofertas. Quando presente, esse <em>id</em> vem pelo <em>marketdata</em> mas não é garantido que ele seja disponibilizado por todos os <em>feeders</em> de <em>marketdata.</em> Será branco caso não o <em>feeder</em> não o disponibilize.</td>
+</tr>
+</tbody>
+</table>
+<p><sub>
+** Observação: A string gerada pelo neutrino como o ClOrdID (client_order_id) contém o tranche_id do algoritmo codificado nela. Para recuperar o valor original, no python, pode-se rodar <code>int(&lt;ClOrdID&gt;.split('.')[1][2:8], 16)</code>, onde <ClOrdID> é uma string. O valor obtido deve corresponder ao PID presente no arquivo de configuração da estratégia.
+</sub></p>
+<h5 id="enumerados">Enumerados</h5>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Nome</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>OrdeSide</code></td>
+<td><p> BID: identifica uma ordem de compra</p>
+<p> ASK: identifica uma ordem de venda</p></td>
+</tr>
+<tr class="even">
+<td><code>OrderType</code></td>
+<td> LIMIT, MARKET, STOP, STOP_LIMIT</td>
+</tr>
+<tr class="odd">
+<td><code>TimeInForce</code></td>
+<td> DAY, FAK, FOK</td>
+</tr>
+<tr class="even">
+<td><code>OrderStatus</code></td>
+<td>
+<ul>
+<li><p>WAIT: estado inicial de toda ordem antes da confirmação ou rejeição</p></li>
+<li><p>WAIT_CANCEL: estado após solicitação de cancelamento e antes da confirmação/rejeição</p></li>
+<li><p>ACTIVE: ordem ativa aceita pela bolsa e apresentada no book</p></li>
+<li><p>WAIT_REPLACE: estado retornar após solicitação de alteração da ordem</p></li>
+<li><p>REPLACED: estado de confirmação de alteração da ordem, a qual é apresentada no book com as mudanças solicitadas</p></li>
+<li><p>FILLED: ordem executada</p></li>
+<li><p>PARTIAL_FILLED: ordem parcialmente executada, na qual a quantidade solicitada não foi atingida porém somente parte dela.</p></li>
+<li><p>CANCELED: ordem cancelada à solicitação do usuário</p></li>
+<li><p>REJECTED: ordem rejeitada</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p><br></p>
+<h5 id="metodos">Métodos</h5>
+<table>
+<thead>
+<tr>
+<th><strong>Nome do método</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_execution()</code></td>
+<td>Retorna <em>True</em> caso a ordem represente uma execução, <em>False</em> caso contrário</td>
+</tr>
+<tr>
+<td><code>is_dead()</code></td>
+<td>Retorna <em>True</em> caso a ordem esteja em um estado final irreversível (cancelada, executada ou rejeitada caso a ordem nunca tenha sido aceita), <em>False</em> caso contrário.</td>
+</tr>
+<tr>
+<td><code>is_alive()</code></td>
+<td>Retorna <em>True</em> caso a ordem esteja num estado que pode ser alterado por ação do algoritmo ou do mercado (ativa, modificada), <em>False</em> caso contrário.</td>
+</tr>
+<tr>
+<td><code>is_pending()</code></td>
+<td>Retorna <em>True</em> caso a ordem esteja em <em>inflight</em> (wait, wait cancel ou wait replace), <em>False</em> caso contrário.</td>
+</tr>
+<tr>
+<td><code>replace()</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cancel()</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h4 id="envio-de-ordens">Envio de ordens</h4>
+<p>Cada função de envio de ordens retonar um número que se for positivo
+representará o id único da ordem que foi criada (apenas no caso de ordem
+nova, já que esse id nunca mudará mesmo que a ordem seja
+modificada/cancelada), este identificador é denominado <em>unique_id.</em></p>
+<p>Para envio, mudança ou cancelamento de ordens podem ser utilizadas as
+funções a seguir:</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Nome da função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>send(symbol=, side=, price=, quantity=, time_in_force=TimeInForce.DAY)</code></td>
+<td><p>Envia uma ordem de tipo limite, usando como argumentos:</p>
+<ul>
+<li><p><em>symbol: </em>nome do ativo</p></li>
+<li><p><em>side:</em> OrderSide::BID ou OrderSide::ASK</p></li>
+<li><p><em>price</em>: valor do preço</p></li>
+<li><p><em>quantity</em>: quantidade inteira múltipla do lote mínimo</p></li>
+<li><p><em>time_in_force</em>: validade da ordem determinado pelo enumerado <em>TimeInForce, </em>default DAY<em>.</em></p></li>
+</ul>
+<p>Retorna <em>unique_id (</em>inteiro &gt; 0) no caso de sucesso, ou código de erro caso contrário.</p></td>
+</tr>
+<tr class="even">
+<td><code>send(symbol=, side=, trigger_price=, price=, quantity=, time_in_force=TimeInForce.DAY)</code></td>
+<td><p>Envia uma ordem de tipo gatilho, usando como argumentos:</p>
+<ul>
+<li><p><em>symbol: </em>nome do ativo</p></li>
+<li><p><em>side:</em> OrderSide::BID ou OrderSide::ASK</p></li>
+<li><p><em>price</em>: valor do preço</p></li>
+<li><p><em>trigger_price</em>: valor do preço gatilho</p></li>
+<li><p><em>quantity</em>: quantidade inteira múltipla do lote mínimo</p></li>
+<li><p><em>time_in_force</em>: validade da ordem determinado pelo enumerado <em>TimeInForce, </em>default DAY.</p></li>
+</ul>
+<p>Retorna <em>unique_id (</em>inteiro &gt; 0) no caso de sucesso, ou código de erro caso contrário.</p></td>
+</tr>
+<tr class="odd">
+<td><code>send(symbol=, side=, quantity=)</code></td>
+<td><p>Envia uma ordem de tipo mercado, usando como argumentos:</p>
+<ul>
+<li><p><em>symbol: </em>nome do ativo</p></li>
+<li><p><em>side:</em> OrderSide::BID ou OrderSide::ASK</p></li>
+<li><p><em>quantity</em>: quantidade inteira múltipla do lote mínimo</p></li>
+</ul>
+<p>Retorna <em>unique_id (</em>inteiro &gt; 0) no caso de sucesso, ou código de erro caso contrário.</p></td>
+</tr>
+<tr class="even">
+<td><code>is_dead()</code></td>
+<td>Retorna <em>True</em> caso a ordem esteja em um estado final irreversível (CANCELED, FILLED, REJECTED ou REJECTED caso a ordem nunca tenha sido aceita), <em>False</em> caso contrário.</td>
+</tr>
+<tr class="odd">
+<td><code>is_alive()</code></td>
+<td>Retorna <em>True</em> caso a ordem esteja num estado que pode ser alterado por ação do algoritmo ou do mercado (ACTIVE, REPLACED), <em>False</em> caso contrário.</td>
+</tr>
+<tr class="even">
+<td><code>is_pending()</code></td>
+<td>Retorna <em>True</em> caso a ordem esteja em <em>inflight</em> (WAIT, WAIT_CANCEL ou WAIT_REPLACE), <em>False</em> caso contrário.</td>
+</tr>
+<tr class="odd">
+<td><p><code>replace(order=, price=, quantity=, time_in_force=)</code></p>
+<p><code>replace(order=, price=, quantity=)</code></p></td>
+<td><p>Modifica uma ordem de tipo limite, usando como argumentos:</p>
+<ul>
+<li><p><em>order</em>: objeto do tipo <em>OrderEntry</em> podendo ser obtido pelas funções de consulta ou pela callback <em>order_update</em></p></li>
+<li><p><em>price</em>: valor do preço</p></li>
+<li><p><em>quantity</em>: quantidade inteira múltipla do lote mínimo</p></li>
+<li><p><em>time_in_force</em>: validade da ordem determinado pelo enumerado <em>TimeInForce, </em>default é o valor do TIF da ordem em questão.</p></li>
+</ul>
+<p>Retorna <em>unique_id (</em>inteiro &gt; 0) no caso de sucesso, ou código de erro caso contrário.</p></td>
+</tr>
+<tr class="even">
+<td><p><code>replace(symbol=, trigger_price=, price=, quantity=, time_in_force=)</code></p>
+<p><code>replace(symbol=, trigger_price=, price=, quantity=)</code></p></td>
+<td><p>Modifica uma ordem de tipo gatilho, usando como argumentos:</p>
+<ul>
+<li><p><em>order</em>: objeto do tipo <em>OrderEntry</em> podendo ser obtido pelas funções de consulta ou pela callback <em>order_update</em></p></li>
+<li><p><em>price</em>: valor do preço</p></li>
+<li><p><em>trigger_price</em>: valor do preço gatilho</p></li>
+<li><p><em>quantity</em>: quantidade inteira múltipla do lote mínimo</p></li>
+<li><p><em>time_in_force</em>: validade da ordem determinado pelo enumerado <em>TimeInForce, </em>default é o valor do TIF da ordem em questão.</p></li>
+</ul>
+<p>Retorna <em>unique_id (</em>inteiro &gt; 0) no caso de sucesso, ou código de erro caso contrário.</p></td>
+</tr>
+<tr class="odd">
+<td><code>cancel(&lt;order&gt;)</code></td>
+<td><p>Cancela determinada ordem, sendo que o cancelamento é comum à todos os tipos de ordens. Usa como argumento:</p>
+<ul>
+<li><p><em>order</em>: objeto do tipo <em>OrderEntry</em> podendo ser obtido pelas funções de consulta ou pela callback <em>order_update</em></p></li>
+</ul>
+<p>Retorna <em>unique_id (</em>inteiro &gt; 0) no caso de sucesso, ou código de erro caso contrário.</p></td>
+</tr>
+<tr class="even">
+<td><code>cancel_all(&lt;symbol&gt;, &lt;side&gt;=NONE_SIDE, &lt;price&gt;=NONE_)</code></td>
+<td><p>Cancela o grupo de ordens do ativo <em>symbol</em>, sendo possível filtrar pelo lado e/ou preço.</p>
+<ul>
+<li><p><em>symbol</em>: nome do ativo</p></li>
+<li><p><em>side</em>: OrderSide::BID ou OrderSide::ASK</p></li>
+<li><p><em>price:</em> valor do preço</p></li>
+</ul>
+<p>Retorna <em>unique_id (</em>inteiro &gt; 0) no caso de sucesso, ou código de erro caso contrário.</p>
+</tr>
+</tbody>
+</table>
+
+<p><br></p>
+<p>No caso do método <em>send </em>recomenda-se o uso dos argumentos com os nomes
+para evitar conflitos entre </p>
+<p>Caso o valor de retorno no envio, mudança ou cancelamento de ordens seja
+um número negativo ele representa um código de falha a ser tratado pelo
+programador. </p>
+<p>O acontecimento de qualquer falha indicará que essa ordem não existe no
+mercado e por isso não haverá qualquer tipo de <em>report</em> via
+<em>order_update(order)</em> para ela.</p>
+<p>Os possíveís códigos de erro são:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Valor de retorno</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unique_id (>0)</td>
+<td>ID único da ordem</td>
+</tr>
+<tr>
+<td>OK (0)</td>
+<td>Envio de ordem OK.</td>
+</tr>
+<tr>
+<td>ORDER_NOT_FOUND (-1)</td>
+<td>Ordem não encontrada</td>
+</tr>
+<tr>
+<td>RISK_INVALID_NET (-2)</td>
+<td>Ordem não aceita pelo controle de risco</td>
+</tr>
+<tr>
+<td>INVALID_QUANTITY (-3)</td>
+<td>Quantidade inválida (por exemplo: quantidade negativa)</td>
+</tr>
+<tr>
+<td>INFLIGHT (-4)</td>
+<td>Ordem pendente</td>
+</tr>
+<tr>
+<td>UNKNOWN (-5)</td>
+<td></td>
+</tr>
+<tr>
+<td>OMS_DISCONNECTED (-6)</td>
+<td>OMS desconectado</td>
+</tr>
+<tr>
+<td>INVALID_SYMBOL (-7)</td>
+<td>Símbolo inválido no contexto da estratégia</td>
+</tr>
+<tr>
+<td>INVALID_PRICE (-8)</td>
+<td>Preço inválido</td>
+</tr>
+<tr>
+<td>NOT_SUPPORTED (-9)</td>
+<td>Ordem não suportada</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>Vale ressaltar que, na modificação de ordens, mesmo que o programador
+altere os campos da ordem, apenas seu preço e quantidade são passíveis
+de modificações. Além disso, para modificar ou cancelar uma ordem,
+deve-se usar de um objeto <em>OrderEntry</em> como argumento, o qual pode ser
+recebido pelo <em>update_order(order)</em> quando encontrada via
+<em>get_live_orders.</em></p>
+<h4 id="gerenciamento-do-wait">Gerenciamento do WAIT</h4>
+<p>Ao utilizar as funções de envio, modificação ou cancelamento de ordens é
+possível ou não receber o status WAIT a partir da corretora.</p>
+<p>O neutrino opta por colocar a ordem em WAIT, WAIT_REPLACE ou WAIT_CANCEL
+de maneira inmediata apenas as funções de envio, modificação ou
+cancelamento sejam invocadas. Este fato acontece independentemente de
+ter ou não recebido o status WAIT pela corretora.</p>
+<p>Caso ocorra de receber o status WAIT da corretora, ele é ignorado e a
+callback <em>order_update</em> é chamada notificando que existe uma ordem em
+WAIT.</p>
+<p>Caso ocorra de não receber o status WAIT da corretora, a callback
+<em>order_update</em> só será chamada ao receber da corretora o estado da ordem
+em questão (ACTIVE ou REJECTED). Nesse momento, o neutrino informa via
+callback num primeiro momento que existe uma ordem em WAIT e em
+sequência uma nova chamada à callback <em>order_update</em> informando o
+estatdo da ordem (ACTIVE ou REJECTED).</p>
+<h2 id="callback-de-ordens">Callback de Ordens</h2>
+<p>As repostas ao envio, modificação e cancelamento de ordens são
+notificadas ao usuário utilizando a callback <em>order_update. </em>De maneira
+opcional, caso o usuário precise ser notificado somente das execuções é
+possível utilizar a callback <em>order_filled.</em></p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Nome da callback</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>order_update(&lt;order&gt;)</td>
+<td><p>Por esse <em>callback</em> o algoritmo será notificado à cada mudança de estado das das ordens válidas e essa notificações dependerão da máquina de estados do protocolo usado pela corretora. (Confira a seção Gerenciamento do WAIT). O argumento utilizado é:</p>
+<ul>
+<li><p><em>order</em>: objeto OrderEntry atualizado com informações recebidas pela corretora</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>order_filled(&lt;order&gt;, &lt;price&gt;, &lt;quantity&gt;)</td>
+<td><p>Callback opcional, a qual será chamada antes do <em>order_update </em>caso definida no algoritmo, reportando somente as execuções. Após a chamada desta callback, a <em>order_update </em>será invocada.</p>
+<ul>
+<li><p><em>order</em>: objeto OrderEntry atualizado com informações recebidas pela corretora</p></li>
+<li><p><em>price: </em>preço da execução</p></li>
+<li><p><em>quantity:</em> quantidade executada</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+<p><br></p>
+<h2 id="consulta-de-ordens">Consulta de Ordens</h2>
+<p>Internamente o neutrino armazena uma lista com as ordens indicando o
+último estado na qual se encontram. A partir desta lista são
+disponibilizados métodos de acesso para filtrar e obter informações do
+conteudo desta lista.</p>
+<p>Os métodos de consulta encontram-se no módulo <em>oms</em>:</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>get_orders(&lt;symbol&gt;="", &lt;side&gt;=NONE_SIDE, &lt;price&gt;=-1)</td>
+<td><p>Recupera a lista de todas as ordens criadas no seu último estado. Utiliza como filtro:</p>
+<ul>
+<li><p><em>symbol: </em>nome do ativo</p></li>
+<li><p><em>side:</em> OrderSide::BID ou OrderSide::ASK</p></li>
+<li><p><em>price</em>: valor do preço</p></li>
+</ul>
+<p>Se são utilizados os valores default o filtro ignora esse campo e utiliza os restantes. Caso todos sejam default, a lista completa é devolvida.</p></td>
+</tr>
+<tr class="even">
+<td>get_live_orders(&lt;symbol&gt;="", &lt;side&gt;=NONE_SIDE, &lt;price&gt;=-1)</td>
+<td><p>Recupera a lista de todas as ordens criadas nas quais o seu estado seja: ACTIVE, REPLACED ou PARTIAL_FILLED.</p>
+<p>Utiliza os mesmos filtros que a função <em>get_orders.</em></p></td>
+</tr>
+<tr class="odd">
+<td>get_total_quantity(&lt;symbol&gt;, &lt;side&gt;, &lt;status_combination&gt;=0)</td>
+<td><p>Recupera o acumulado das quantidades das ordens para o atibo <em>symbol</em> e lado <em>side</em>.</p>
+<p>O bitmask <em>status_combination</em> especifica o filtro utilizado para o cálculo. O filtro representa uma combinação dos possíveis estados da ordem. No caso de solicitar ordens em ativas e executas, utilize <em>status_combination = (OrderStatus::ACTIVE | OrderStatus::FILLED)</em></p></td>
+</tr>
+<tr class="even">
+<td>get_order_by_id(&lt;unique_id&gt;)</td>
+<td><p>Recupera a ordem pelo <em>unique_id</em>.</p>
+<p>Retorna None caso não exista uma ordem com o <em>unique_id </em>fornecido.</p></td>
+</tr>
+</tbody>
+</table>
+
+<p><br></p>
+<h2 id="controle-de-risco">Controle de Risco</h2>
+<p>O módulo de risco tem a função de não permitir que seja ultrapassado o
+limite de posição configurado no neutrino. Após atingir esse limite
+apenas as ordens que diminuam a posição serão aceitas além de permitir
+a <em>virada de mão.</em></p>
+<p>A configuração do risco é feita por meio da mensagem de controle do
+frontend ControlAlgo usando o comando <em>Set</em>. A mensagem <em>ControlAlgo</em> no
+seu campo  <em>Tunables</em> deve conter o <em>max_position.</em> Este campo pode ser
+composto por múltiplos objetos indexados pelo nome do ativo. Cada item,
+deve ter dois campos obrigatórios <em>limit</em>, o qual indica o valor máximo
+a ser atingido e o campo <em>type_limit</em>, indicando se o valor refere-se a
+uma quantidade ou um valor financeiro.</p>
+<p>Neste exemplo, dois ativos são configurados. O primeiro deles utiliza um
+limite em quantidade e o segundo em financeiro:</p>
+<pre><code class="language-json">{
+  &quot;Tunables&quot;: {
+    &quot;FooStrategyName&quot;: {
+      &quot;max_position&quot;: {
+        &quot;DI1F21&quot;: {
+          &quot;limit&quot;: 200,
+          &quot;type_limit&quot;: &quot;quantity&quot;
+        },
+        &quot;DI1F22&quot;: {
+          &quot;limit&quot;: 400,
+          &quot;type_limit&quot;: &quot;financial&quot;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<p>Para acessar aos valores de risco dentro da estrategia utilize o
+módulo <em>risk, </em>por meio da função <em>get:</em></p>
+<table>
+<thead>
+<tr>
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get(&lt;symbol&gt;)</code></td>
+<td>Recupera a estrutura <em>RiskData</em> com os valores de risco para o ativo <em>symbol</em></td>
+</tr>
+</tbody>
+</table>
+</p>
+<p>A estrutura <em>RiskData</em> é composta por: </p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Atributo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>limit</td>
+<td>Valor máximo a ser atingido após a conclusão da operação</td>
+</tr>
+<tr class="even">
+<td>type_limit</td>
+<td><p>Tipo risco, sendo possível:</p>
+<ul>
+<li><p>QUANTITY</p></li>
+<li><p>FINANCIAL</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+</p>
+<p>Baseado na configuração anterior é possível utilizar o módulo de risco
+da maneira a seguir:</p>
+<pre><code class="language-python">win_risk = neutrino.risk.get('DI1F21')
+print(win_risk.limit)
+# &gt;&gt; 200
+print(win_risk.type_limit)
+# &gt;&gt; QUANTITY
+</code></pre>
+<p>As ordens que forem rejeitadas pelo risco tem o código de
+erro <code>RISK_INVALID_NET</code>. Portanto ela não notificará o
+algoritmo via <em>order_update()</em>.</p>
+<p>A rejeição pelo risco é detectada ao comparar os valores de limite e a
+soma das quantidades de ordens executadas (FILLED e PARTIAL_FILLED),
+ordens ativas ou pendentes (ACTIVE, REPLACED, WAIT e WAIT_CANCEL) e da
+nova ordem enviada.</p>
+<h2 id="controle-de-posicao">Controle de Posição</h2>
+<p>O controle de posição está contido no módulo <em>position.</em> Por meio dele é
+possível acessar a posição de determinado ativo:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Função</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get(&lt;symbol&gt;)</code></td>
+<td>Recupera a posição para o ativo <em>symbol, </em>retornando um objeto <em>PositionStatus</em></td>
+</tr>
+</tbody>
+</table>
+</p>
+<p>Um objeto da classe <em>PositionStatus</em> contem os atributos a seguir:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Atributo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>total</td>
+<td>Objeto <em>PositionData</em> contendo informações sobre a posição total</td>
+</tr>
+<tr>
+<td>partial</td>
+<td>Objeto <em>PositionData</em> contendo informações sobre a posição parcial</td>
+</tr>
+<tr>
+<td>initial</td>
+<td>Objeto <em>PositionData</em> contendo informações sobre a posição inicial</td>
+</tr>
+</tbody>
+</table>
+</p>
+<p>Cada objeto <em>PositionData</em> contem:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Atributo</strong></th>
+<th><strong>Descrição</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>net</td>
+<td>Quantidade da posição</td>
+</tr>
+<tr>
+<td>net_price</td>
+<td>Preço médio</td>
+</tr>
+<tr>
+<td>bid_quantity</td>
+<td>Quantidade da compra</td>
+</tr>
+<tr>
+<td>ask_quantity</td>
+<td>Quantidade da venda</td>
+</tr>
+<tr>
+<td>bid_volume</td>
+<td>Volume da compra</td>
+</tr>
+<tr>
+<td>ask_volume</td>
+<td>Volume da venda</td>
+</tr>
+</tbody>
+</table>
+</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../mktdata/" class="btn btn-neutral" title="Market Data API"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../mktdata/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

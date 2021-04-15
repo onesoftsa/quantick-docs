@@ -6,6 +6,17 @@ __pycache__/
 # C extensions
 *.so
 
+# Stuff
+scripts/confs/credentials.yml
+scripts/confs/stratslist.yml
+algos/algo*
+site/*
+strats/*
+!strats/scheduler/
+.DS_Store
+neutrinos/*
+dcomposes/docker-compose.mine.yml
+
 # Distribution / packaging
 .Python
 build/

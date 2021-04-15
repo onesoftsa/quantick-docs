@@ -1,0 +1,6 @@
+site_name: quantick/neutrino
+nav:
+    - Primeiros passos: index.md
+    - Market Data API: mktdata.md
+    - Orders Routing API: orders.md
+theme: readthedocs

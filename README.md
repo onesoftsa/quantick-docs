@@ -1,2 +1,3 @@
-# quantick-docs
-Documentation of quantick API
+# Quantick Docs
+
+This repository is the primary source for documentation for quantick API.

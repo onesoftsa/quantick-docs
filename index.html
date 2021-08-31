@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="css/theme.css" />
   <link rel="stylesheet" href="css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -25,9 +25,8 @@
   
   <script src="js/jquery-2.1.1.min.js" defer></script>
   <script src="js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
-  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -41,7 +40,7 @@
         <a href="." class="icon icon-home"> quantick/neutrino</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -102,17 +101,23 @@
   
   <hr/>
 </div>
+
           <div role="main">
             <div class="section">
               
                 <h1 id="neutrino-api">Neutrino API</h1>
-<p>O neutrino é uma API em Python para implementar estratégias de algotrading no mercado brasileiro. Ela dá acesso à uma engine desenvolvida em C++ que cuida de todas as interações com a B3 e está divida nos seguintes conjuntos:</p>
+<p>O neutrino é uma API em Python para implementar estratégias de algotrading no
+ mercado brasileiro. Ela dá acesso à uma engine desenvolvida em C++ que cuida de
+ todas as interações com a B3 e está divida nos seguintes conjuntos:</p>
 <ul>
 <li>Estruturas de análise: book, trades (ticks), candles e indicadores</li>
 <li>Funções de configuração</li>
 <li>Callbacks</li>
 </ul>
-<p>O acesso à estes conjuntos é feito pelos objetos <code>market</code>, <code>utils</code>, <code>oms</code> e <code>position</code>. A API também realiza alguns callbacks para seu código em Python quando certos eventos ocorrem. Portanto, você pode implementar os métodos abaixo:</p>
+<p>O acesso à estes conjuntos é feito pelos objetos <code>market</code>, <code>utils</code>, <code>oms</code> e
+ <code>position</code>. A API também realiza alguns callbacks para seu código em Python
+ quando certos eventos ocorrem. Portanto, você pode implementar os métodos
+ abaixo:</p>
 <ul>
 <li><code>initialize</code> (obrigatório)</li>
 <li><code>on_data</code> (opcional)</li>
@@ -154,13 +159,15 @@ $ doker image
 </code></pre>
 <h2 id="arquivos-de-configuracao">Arquivos de configuração</h2>
 <h3 id="market-data">Market Data</h3>
-<p>O arquivo de configuração determina os parâmetros para execução do Neutrino. O formato do arquivo é JSON, confira um exemplo:</p>
+<p>O arquivo de configuração determina os parâmetros para execução do Neutrino.
+ O formato do arquivo é JSON, confira um exemplo:</p>
 <pre><code class="language-json">{
    &quot;Algorithm&quot; : &quot;python&quot;,
    &quot;CPUMask&quot; : 15,
-   &quot;ExecutionClient&quot; : &quot;XBMF.conf&quot;,
-   &quot;MDChannel&quot; : &quot;&lt;IP&gt;:&lt;PORTA&gt;&quot;,
-   &quot;PID&quot; : 0,
+   &quot;ExecutionClient&quot; : &quot;demo.conf&quot;,
+   &quot;MDChannel&quot; : { &quot;&lt;ALIAS&gt;&quot;: &quot;&lt;IP&gt;:&lt;PORTA&gt;&quot;},
+   &quot;AlgoId&quot; : 0,
+   &quot;AlgoClusterId&quot; : 0,
    &quot;Parent&quot; : 0,
    &quot;FrontendIdleTimeout&quot;: 60,
    &quot;pos&quot;: {
@@ -171,7 +178,8 @@ $ doker image
    },
    &quot;Symbols&quot; : [ &quot;DOLM18&quot; ],
    &quot;class&quot; : &quot;SimpleCorpOrder&quot;,
-   &quot;import&quot; : &quot;algo_modules&quot;
+   &quot;import&quot; : &quot;algo_modules&quot;,
+   &quot;StrictRisk&quot;: false
 }
 </code></pre>
 <p>Onde os parâmetros disponíveis são:</p>
@@ -192,7 +200,7 @@ $ doker image
 <tr>
 <td>Symbol</td>
 <td>Lista dos nomes dos ativos</td>
-<td>array de strings</td>
+<td>lista de strings</td>
 </tr>
 <tr>
 <td>StrictRisk</td>
@@ -210,8 +218,13 @@ $ doker image
 <td>int</td>
 </tr>
 <tr>
-<td>PID</td>
+<td>AlgoClusterId</td>
 <td>Process ID atribuido pelo sistema operacional e preenchido pelo AlgoMan</td>
+<td>int</td>
+</tr>
+<tr>
+<td>AlgoId</td>
+<td>Process ID atribuido pelo neutrino e preenchido pelo AlgoMan</td>
 <td>int</td>
 </tr>
 <tr>
@@ -236,8 +249,8 @@ $ doker image
 </tr>
 <tr>
 <td>MDChannel</td>
-<td>IP e porta do Relay</td>
-<td>string, no formato <code>&lt;IP&gt;:&lt;porta&gt;</code></td>
+<td>Dicionário com IP e porta dos Relays utilizados</td>
+<td>dict de strings, no formato <code>&lt;IP&gt;:&lt;porta&gt;</code></td>
 </tr>
 </tbody>
 </table>
@@ -318,11 +331,10 @@ $ make neutrino-env
 $ neutrinov4 -c &lt;ARQUIVO DA PASTA&gt;.conf
 </code></pre>
 <p>Isso iniciará o <code>neutrino</code> em modo de simulação, utilizando dados em tempo
- real, e chamará os callbacks para sua estratégia todo evento de book ou
- negócio. Para testar os comandos que implementar, digite em um novo console:</p>
-<pre><code class="language-shell"> $ cd ~/onesoft/algos/algo&lt;ID&gt;
- $ controller &lt;ID&gt;
- $   set &lt;NOME ESTRATÉGIA&gt; comandos-em-formato-json-aqui
+ real, e todo evento de book ou negócio chamará os callbacks para sua
+ estratégia. Para testar os comandos que implementar, digite em um novo console:</p>
+<pre><code class="language-shell"> $ controller &lt;algo-id&gt; &lt;unix-domain-socket-path&gt;
+ $ set &lt;NOME ESTRATÉGIA&gt; comandos-em-formato-json-aqui
 </code></pre>
               
             </div>
@@ -355,15 +367,16 @@ $ neutrinov4 -c &lt;ARQUIVO DA PASTA&gt;.conf
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      
-      
-      
-        <span style="margin-left: 15px"><a href="mktdata/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
-    </span>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="mktdata/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
 </div>
     <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
     <script src="js/theme.js" defer></script>
       <script src="search/main.js" defer></script>
     <script defer>
@@ -376,6 +389,6 @@ $ neutrinov4 -c &lt;ARQUIVO DA PASTA&gt;.conf
 </html>
 
 <!--
-MkDocs version : 1.1.2
-Build Date UTC : 2021-04-15 13:40:54.759163+00:00
+MkDocs version : 1.2.2
+Build Date UTC : 2021-08-31 15:10:56.434940+00:00
 -->

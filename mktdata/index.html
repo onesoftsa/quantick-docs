@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -25,9 +25,8 @@
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
   <script src="../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
-  
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -41,7 +40,7 @@
         <a href=".." class="icon icon-home"> quantick/neutrino</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -140,8 +139,6 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#controle-de-recursos">Controle de recursos</a>
-    </li>
     </ul>
                     </li>
                 </ul>
@@ -178,6 +175,7 @@
   
   <hr/>
 </div>
+
           <div role="main">
             <div class="section">
               
@@ -205,14 +203,14 @@ Por exemplo:</p>
 <pre><code class="language-python">from neutrino import market
 
 # Uso de duas callbacks customizadas
-self.win = market.add(
+self.win = market(self).add(
     'WINQ19',
     book_callback=on_book,
     trade_callback=on_trade,
     trade_buffer_size=10)
 
 # Cancelada callback de book e uso de callback default on_data para trades
-self.wdo = market.add('WDOQ19', book_callback=None, trade_buffer_size=50)
+self.wdo = market(self).add('WDOQ19', book_callback=None, trade_buffer_size=50)
 </code></pre>
 <p>A callback default é chamada <em>on_data</em> e precisa ser implementada pelo
 usuário para ser notificado sobre as mudanças de book e trades.</p>
@@ -240,13 +238,13 @@ possível utilizar a função <em>get</em> para recuperá-lo:</p>
 </table>
 <p><br>
 Por exemplo:</p>
-<pre><code class="language-python">self.instrument = market.get('WINQ19')
+<pre><code class="language-python">self.instrument = market(self).get('WINQ19')
 </code></pre>
 <h3 id="desassinatura">Desassinatura</h3>
 <p>Para remover um instrumento utilize o objeto obtido pela criação do
 mesmo:</p>
-<pre><code class="language-python">self.instrument = neutrino.market.get('WINDOM19')
-if neutrino.market.remove(self.instrument):
+<pre><code class="language-python">self.instrument = neutrino.market(self).get('WINDOM19')
+if neutrino.market(self).remove(self.instrument):
     print('success')
 </code></pre>
 <p>A função <em>remove </em>é parte do módulo <em>market:</em></p>
@@ -272,8 +270,8 @@ removidos de maneira automática, eles continuam sendo atualizados.</p>
 futuras callbacks, podendo mudar a callback default on_data para outra
 função, por exemplo:</p>
 <pre><code class="language-python">def initialize(self, symbols):
-    market.add('WINQ19', book_callback=on_win_callback, trade_callback=None)
-    market.add('WDOM19', book_callback=None, trade_callback=on_wdo_callback)
+    market(self).add('WINQ19', book_callback=on_win_callback, trade_callback=None)
+    market(self).add('WDOM19', book_callback=None, trade_callback=on_wdo_callback)
 
 def on_win_callback(self, update):
     print('WINQ19 bar received')
@@ -285,7 +283,7 @@ def on_wdo_callback(self, update):
 exemplo a seguir, o usuário cancela a callback do book, porém mantem as
 notificações dos trades por meio da callback default on_data:</p>
 <pre><code class="language-python">def initialize(self, symbols):
-    market.add('WINQ19', book_callback=None)
+    market(self).add('WINQ19', book_callback=None)
 
 def on_data(self, update):
     print('WINQ19 trade')
@@ -435,9 +433,9 @@ Estão disponíveis os candles do tipo stick e renko. A sua assinatura pode ser 
 Por exemplo:</p>
 <pre><code class="language-python">from neutrino import market
 
-bar = market.add_bar(symbol, bar_count=100, interval=1)
-interday_bar = market.add_interday_bar(symbol, bar_count=10, interval='M')
-renko = market.add_bar(symbol, tick_count=5)
+bar = market(self).add_bar(symbol, bar_count=100, interval=1)
+interday_bar = market(self).add_interday_bar(symbol, bar_count=10, interval='M')
+renko = market(self).add_bar(symbol, tick_count=5)
 </code></pre>
 <p>A assinatura de um instrumento e de barras são <strong>independentes</strong>, sendo
 que o usuário pode solicitar os candles de um determinado ativo usando a
@@ -475,11 +473,11 @@ função <code>get_bar</code>, <code>get_interday_bar</code> ou <code>get_renko<
 
 <p><br>
 Por exemplo:</p>
-<pre><code class="language-python">self.bar_win = market.get_bar('WINQ19')
-self.bar_win_count_1000 = market.get_bar('WINQ19', bar_count=1000)
-self.bar_win_interval_5 = market.get_bar('WINQ19', interval=5)
-self.bar_win_interval_day = market.get_interday_bar('WINQ19', interval='D')
-self.renko_win_10 = market.get_renko('WINQ19', tick_count=10)
+<pre><code class="language-python">self.bar_win = market(self).get_bar('WINQ19')
+self.bar_win_count_1000 = market(self).get_bar('WINQ19', bar_count=1000)
+self.bar_win_interval_5 = market(self).get_bar('WINQ19', interval=5)
+self.bar_win_interval_day = market(self).get_interday_bar('WINQ19', interval='D')
+self.renko_win_10 = market(self).get_renko('WINQ19', tick_count=10)
 </code></pre>
 <h3 id="atributos-e-metodos_1">Atributos e métodos</h3>
 <ul>
@@ -571,8 +569,8 @@ criação do mesmo usando a função <code>remove_bar</code>, <code>remove_inter
 Por exemplo:</p>
 <pre><code class="language-python">from utils import market
 
-bar = market.add_bar('PETR4')
-if market.remove_bar(bar):
+bar = market(self).add_bar('PETR4')
+if market(self).remove_bar(bar):
     print('success')
 </code></pre>
 <p>Ao remover a assinatura de um candle todos os indicadores atrelados a
@@ -580,7 +578,7 @@ ele também são removidos.</p>
 <h2 id="indicadores">Indicadores</h2>
 <p>Os indicadores estão naturalmente vinculados a um candle. Sendo que, a
 sua assinatura deve usar um objeto candle:</p>
-<pre><code class="language-python">self.bar_winq19 = neutrino.market.add_bar(&quot;WINQ19&quot;)
+<pre><code class="language-python">self.bar_winq19 = neutrino.market(self).add_bar(&quot;WINQ19&quot;)
 
 if self.bar_winq19.ready():
 
@@ -717,6 +715,14 @@ print(self.bar_winq19.ready(), self.sma_winq19.ready())
 <li><p>deviation_count:</p></li>
 </ul></td>
 </tr>
+<tr class="odd">
+<td>RSI*</td>
+<td><code>add_rsi(bar_count=..., source=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>source: tipo de entrada</p></li>
+</ul></td>
+</tr>
 </tbody>
 </table>
 
@@ -726,13 +732,14 @@ print(self.bar_winq19.ready(), self.sma_winq19.ready())
 <p>Os valores dos indicadores pode ser recuperado acessando o vetor de
 valores <em>values:</em></p>
 <pre><code class="language-python"># Acessando o valor do indicador mais recente
+candle =  market(self).get_bar('WINQ19', interval=5)
 self.sma = candle.add_sma(10)
 print(self.sma.values[-1])
 </code></pre>
 <p>No caso do BBANDS e SABBANDS os valores devem ser acessados pelo
 vetor <em>bands</em>:</p>
 <pre><code class="language-python"># Acessando o valor do indicador mais recente
-
+candle =  market(self).get_bar('WINQ19', interval=5)
 self.sabbands = candle.add_bbands(bar_count=10, deviation_up=5,
 deviation_down=5, average=IndicatorAverage.SMA, sa_bar_count=5)
 
@@ -867,7 +874,7 @@ No exemplo a seguir o objeto do indicador SMA é salvo e utilizado para
 sua remoção:</p>
 <pre><code class="language-python">from utils import market
 
-bar = market.add_bar('PETR4')
+bar = market(self).add_bar('PETR4')
 sma = bar.add_sma(10)
 if bar.remove_indicator(sma):
     print('success')
@@ -895,7 +902,7 @@ especificados no arquivo de configuração da estrategia:</p>
 <p>A API também permite implementar a callback <em>finalize</em> (não obrigatória)
 que é chamada quando a estratégia é terminada por qualquer motivo:</p>
 <pre><code class="language-python">def initialize(self, symbols):
-    neutrino.utils.quit()
+    neutrino.utils(self).quit()
 
 def finalize(self, reason):
     print(&quot;finalize:&quot; + str(reason))
@@ -906,7 +913,7 @@ finalize. O parâmetro reason indica o motivo do encerramento. Os valores
 para o QuitReason são:</p>
 <ul>
 <li>
-<p>USER_QUIT: o usuário usou a chamada neutrino.utils.quit() ou usando
+<p>USER_QUIT: o usuário usou a chamada neutrino.utils(self).quit() ou usando
     CTRL+C</p>
 </li>
 <li>
@@ -931,6 +938,9 @@ para o QuitReason são:</p>
 </li>
 <li>
 <p>NO_OMS_CONNECTION: sem conexão com o OMS</p>
+</li>
+<li>
+<p>NO_ALGOMAN_CONNECTION: sem conexão com o Algoman</p>
 </li>
 </ul>
 <h3 id="callback-default-book-trade-e-candles">Callback default, book, trade e candles</h3>
@@ -990,12 +1000,12 @@ das opções possíveis:</p>
 <pre><code class="language-python">from neutrino import *
 
 def initalize(self)
-    market.add_book(&quot;WINQ19&quot;)
-    market.add_book(&quot;PETR4&quot;)
-    self.winq_book = market.get_book(&quot;WINQ19&quot;)
-    self.petr_book = market.get_book(&quot;PETR4&quot;)
-    self.winq_candle = market.add_bar(&quot;WINQ19&quot;, interval=1)
-    self.petr_candle = market.add_bar(&quot;PETR4&quot;, interval=5)
+    market(self).add_book(&quot;WINQ19&quot;)
+    market(self).add_book(&quot;PETR4&quot;)
+    self.winq_book = market(self).get_book(&quot;WINQ19&quot;)
+    self.petr_book = market(self).get_book(&quot;PETR4&quot;)
+    self.winq_candle = market(self).add_bar(&quot;WINQ19&quot;, interval=1)
+    self.petr_candle = market(self).add_bar(&quot;PETR4&quot;, interval=5)
     self.winq_candle.add_sma(bar_count=5)
     self.petr_candle.add_sma(bar_count=10)
     self.petr_candle.add_adx()
@@ -1030,9 +1040,9 @@ acontecimento. Por exemplo, podem ser assinados book e trades porém o
 book será só consultado quando um trade acontecer. Para ter este efeito
 é possível anular a callback do book:</p>
 <pre><code class="language-python">def initalize(self)
-    market.add(&quot;PETR4&quot;, book_callback=None)
-    self.petr_book = market.get(&quot;PETR4&quot;).book
-    self.petr_trades = market.get(&quot;PETR4&quot;).trades
+    market(self).add(&quot;PETR4&quot;, book_callback=None)
+    self.petr_book = market(self).get(&quot;PETR4&quot;).book
+    self.petr_trades = market(self).get(&quot;PETR4&quot;).trades
 
 def on_data(self, update):
     # Imprime o último trade e o topo do book a cada novo negócio
@@ -1075,6 +1085,10 @@ módulo existem as funções a seguir:</p>
 <td>Finaliza a estrategia chamando a callback de <em>finalize</em> com o valor <em>reason=USER_QUIT</em></td>
 </tr>
 <tr class="even">
+<td><code>turn_off(&lt;text&gt;)</code></td>
+<td><p>Envia mensagem para usuário, retira estratégia do scheduller do site e termina estratégia.</p></td>
+</tr>
+<tr class="odd">
 <td><code>by_price(side=&lt;book_side&gt;, depth=&lt;max_rows&gt;)</code></td>
 <td>Agrupa o book por preço de usando como entrada o <em>lado</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> Se <em>depth é </em>0 o book inteiro é agrupado, caso contrário o book é agrupado até gerar no máximo <em>max_rows</em> como saída.</td>
 </tr>
@@ -1116,8 +1130,8 @@ funções encontram-se dentro do módulo <em>utils</em>.</p>
 No exemplo a seguir, a funçao <em>opening </em>será executada as 10:00h e a
 função <em>check</em> será executada a cada 0.5s:</p>
 <pre><code class="language-python">from neutrino import utils
-opening_event = utils.at(self.opening, 10, 00)
-check_event = utils.every(self.check, 0.5)
+opening_event = utils(self).at(self.opening, 10, 00)
+check_event = utils(self).every(self.check, 0.5)
 
 </code></pre>
 <p>Também é possível recuperar e remover as funções agendadas, assim como
@@ -1125,9 +1139,9 @@ os outros callbacks registrados pelo usuário. Neste exemplo, o usuário
 remove os eventos agendados um a um:</p>
 <pre><code class="language-python">from neutrino import utils
 
-function = utils.get_functions()
+function = utils(self).get_functions()
 for function in functions:
-    utils.remove_function(function)
+    utils(self).remove_function(function)
 
 </code></pre>
 <p>Lembre-se que:</p>
@@ -1138,7 +1152,7 @@ for function in functions:
     sendo executadas normalmente;</p>
 </li>
 <li>
-<p>as funções agendadas pelo utils.at são excluídas logo após serem
+<p>as funções agendadas pelo utils(self).at são excluídas logo após serem
     executadas.</p>
 </li>
 <li>
@@ -1360,7 +1374,7 @@ Por exemplo:</p>
 <pre><code class="language-python">from neutrino import market
 
 # Uso de callback customizadas
-self.win_summary = market.add_summary(
+self.win_summary = market(self).add_summary(
     'WINQ19',
     summary_callback=on_summary)
 </code></pre>
@@ -1384,7 +1398,7 @@ self.win_summary = market.add_summary(
 Por exemplo:</p>
 <pre><code class="language-python">from neutrino import market
 
-self.win_summary = market.get_summary('WINQ19')
+self.win_summary = market(self).get_summary('WINQ19')
 print(self.win_summary.stats.high.price)
 </code></pre>
 <h3 id="desassinatura_3">Desassinatura</h3>
@@ -1407,51 +1421,9 @@ print(self.win_summary.stats.high.price)
 Por exemplo:</p>
 <pre><code class="language-python">from neutrino import market
 
-self.win_summary = market.add_summary('WINQ19')
-success = market.remove_summary(self.win_summary)
+self.win_summary = market(self).add_summary('WINQ19')
+success = market(self).remove_summary(self.win_summary)
 </code></pre>
-<h2 id="controle-de-recursos">Controle de recursos</h2>
-<p>O usuário pode requisitar múltiplos recursos do sistema como memoria,
-disco e CPU. Este acesso pode ser feito diretamente invocando as
-próprias funções do Python, por exemplo abrindo um arquivo e salvando
-nele quantidades absurdas de dados. Ou o acesso pode ser feito usando as
-funções deste framework, por exemplo solicitando um buffer gigante para
-armazenar os trades.</p>
-<p>Como ambas situações citadas acima geram risco, o Quantick deve deter o
-processo que ultrapasse os limiares seguros para funcionamento, auxiliando
-o controle dos recursos. Deste modo, o framework controla:</p>
-<ul>
-<li>
-<p>Tamanho máximo dos buffers para book, trades e candles: quantidade
-    de barras, entradas de book e trades disponíveis para o usuário.</p>
-</li>
-<li>
-<p>Quantidade máxima de candles asssinados.</p>
-</li>
-<li>
-<p>Quantidade máxima de indicadores assinados.</p>
-</li>
-<li>
-<p>Quantidade máxima de callbacks assinadas.</p>
-</li>
-<li>
-<p>Quantidade máxima de ativos.</p>
-</li>
-<li>
-<p>Frequencia máxima das callbacks.</p>
-</li>
-<li>
-<p>Limite de intervalos para os candles e indicadores.</p>
-</li>
-<li>
-<p>Restringir o range de dados usados nos indicadores. e.g O tamanho da
-    janela no moving average determina o custo em CPU do cálculo de
-    indicador.</p>
-</li>
-<li>
-<p>Data limite para a assinatura dos candles.</p>
-</li>
-</ul>
               
             </div>
           </div>
@@ -1485,17 +1457,18 @@ o controle dos recursos. Deste modo, o framework controla:</p>
   </div>
 
   <div class="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      
-      
-        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../orders/" style="color: #fcfcfc">Next &raquo;</a></span>
-      
-    </span>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../orders/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
 </div>
     <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
     <script src="../js/theme.js" defer></script>
       <script src="../search/main.js" defer></script>
     <script defer>

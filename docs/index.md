@@ -161,7 +161,6 @@ Isso iniciará o `neutrino` em modo de simulação, utilizando dados em tempo
  negócio. Para testar os comandos que implementar, digite em um novo console:
 
 ```shell
- $ cd ~/onesoft/algos/algo<ID>
- $ controller <ID>
- $   set <NOME ESTRATÉGIA> comandos-em-formato-json-aqui
+ $ controller <algo-id> <unix-domain-socket-path>
+ $ set <NOME ESTRATÉGIA> comandos-em-formato-json-aqui
 ```

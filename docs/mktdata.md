@@ -19,14 +19,14 @@ Por exemplo:
 from neutrino import market
 
 # Uso de duas callbacks customizadas
-self.win = market.add(
+self.win = market(self).add(
     'WINQ19',
     book_callback=on_book,
     trade_callback=on_trade,
     trade_buffer_size=10)
 
 # Cancelada callback de book e uso de callback default on_data para trades
-self.wdo = market.add('WDOQ19', book_callback=None, trade_buffer_size=50)
+self.wdo = market(self).add('WDOQ19', book_callback=None, trade_buffer_size=50)
 ```
 
 
@@ -54,7 +54,7 @@ possível utilizar a função *get* para recuperá-lo:
 Por exemplo:
 
 ```python
-self.instrument = market.get('WINQ19')
+self.instrument = market(self).get('WINQ19')
 ```
 
 
@@ -65,8 +65,8 @@ Para remover um instrumento utilize o objeto obtido pela criação do
 mesmo:
 
 ```python
-self.instrument = neutrino.market.get('WINDOM19')
-if neutrino.market.remove(self.instrument):
+self.instrument = neutrino.market(self).get('WINDOM19')
+if neutrino.market(self).remove(self.instrument):
     print('success')
 ```
 
@@ -90,8 +90,8 @@ função, por exemplo:
 
 ```python
 def initialize(self, symbols):
-    market.add('WINQ19', book_callback=on_win_callback, trade_callback=None)
-    market.add('WDOM19', book_callback=None, trade_callback=on_wdo_callback)
+    market(self).add('WINQ19', book_callback=on_win_callback, trade_callback=None)
+    market(self).add('WDOM19', book_callback=None, trade_callback=on_wdo_callback)
 
 def on_win_callback(self, update):
     print('WINQ19 bar received')
@@ -106,7 +106,7 @@ notificações dos trades por meio da callback default on_data:
 
 ```python
 def initialize(self, symbols):
-    market.add('WINQ19', book_callback=None)
+    market(self).add('WINQ19', book_callback=None)
 
 def on_data(self, update):
     print('WINQ19 trade')
@@ -244,9 +244,9 @@ Por exemplo:
 ```python
 from neutrino import market
 
-bar = market.add_bar(symbol, bar_count=100, interval=1)
-interday_bar = market.add_interday_bar(symbol, bar_count=10, interval='M')
-renko = market.add_bar(symbol, tick_count=5)
+bar = market(self).add_bar(symbol, bar_count=100, interval=1)
+interday_bar = market(self).add_interday_bar(symbol, bar_count=10, interval='M')
+renko = market(self).add_bar(symbol, tick_count=5)
 ```
 
 A assinatura de um instrumento e de barras são **independentes**, sendo
@@ -290,11 +290,11 @@ função `get_bar`, `get_interday_bar` ou `get_renko`:
 Por exemplo:
 
 ```python
-self.bar_win = market.get_bar('WINQ19')
-self.bar_win_count_1000 = market.get_bar('WINQ19', bar_count=1000)
-self.bar_win_interval_5 = market.get_bar('WINQ19', interval=5)
-self.bar_win_interval_day = market.get_interday_bar('WINQ19', interval='D')
-self.renko_win_10 = market.get_renko('WINQ19', tick_count=10)
+self.bar_win = market(self).get_bar('WINQ19')
+self.bar_win_count_1000 = market(self).get_bar('WINQ19', bar_count=1000)
+self.bar_win_interval_5 = market(self).get_bar('WINQ19', interval=5)
+self.bar_win_interval_day = market(self).get_interday_bar('WINQ19', interval='D')
+self.renko_win_10 = market(self).get_renko('WINQ19', tick_count=10)
 ```
 
 ### Atributos e métodos
@@ -368,8 +368,8 @@ Por exemplo:
 ```python
 from utils import market
 
-bar = market.add_bar('PETR4')
-if market.remove_bar(bar):
+bar = market(self).add_bar('PETR4')
+if market(self).remove_bar(bar):
     print('success')
 ```
 
@@ -383,7 +383,7 @@ Os indicadores estão naturalmente vinculados a um candle. Sendo que, a
 sua assinatura deve usar um objeto candle:
 
 ```python
-self.bar_winq19 = neutrino.market.add_bar("WINQ19")
+self.bar_winq19 = neutrino.market(self).add_bar("WINQ19")
 
 if self.bar_winq19.ready():
 
@@ -526,6 +526,14 @@ O framework fornece os indicadores a seguir:
 <li><p>deviation_count:</p></li>
 </ul></td>
 </tr>
+<tr class="odd">
+<td>RSI*</td>
+<td><code>add_rsi(bar_count=..., source=...)</code></td>
+<td><ul>
+<li><p>bar_count: quantidade de barras</p></li>
+<li><p>source: tipo de entrada</p></li>
+</ul></td>
+</tr>
 </tbody>
 </table>
 
@@ -541,6 +549,7 @@ valores *values:*
 
 ```python
 # Acessando o valor do indicador mais recente
+candle =  market(self).get_bar('WINQ19', interval=5)
 self.sma = candle.add_sma(10)
 print(self.sma.values[-1])
 ```
@@ -550,7 +559,7 @@ vetor *bands*:
 
 ```python
 # Acessando o valor do indicador mais recente
-
+candle =  market(self).get_bar('WINQ19', interval=5)
 self.sabbands = candle.add_bbands(bar_count=10, deviation_up=5,
 deviation_down=5, average=IndicatorAverage.SMA, sa_bar_count=5)
 
@@ -662,7 +671,7 @@ sua remoção:
 ```python
 from utils import market
 
-bar = market.add_bar('PETR4')
+bar = market(self).add_bar('PETR4')
 sma = bar.add_sma(10)
 if bar.remove_indicator(sma):
     print('success')
@@ -703,7 +712,7 @@ que é chamada quando a estratégia é terminada por qualquer motivo:
 
 ```python
 def initialize(self, symbols):
-    neutrino.utils.quit()
+    neutrino.utils(self).quit()
 
 def finalize(self, reason):
     print("finalize:" + str(reason))
@@ -715,7 +724,7 @@ O neutrino sinaliza que a estrategia vai encerrar chamando a callback
 finalize. O parâmetro reason indica o motivo do encerramento. Os valores
 para o QuitReason são:
 
--   USER_QUIT: o usuário usou a chamada neutrino.utils.quit() ou usando
+-   USER_QUIT: o usuário usou a chamada neutrino.utils(self).quit() ou usando
     CTRL+C
 
 -   ALGOMAN_QUIT: o Algoman enviou o comando Abort
@@ -789,12 +798,12 @@ das opções possíveis:
 from neutrino import *
 
 def initalize(self)
-    market.add_book("WINQ19")
-    market.add_book("PETR4")
-    self.winq_book = market.get_book("WINQ19")
-    self.petr_book = market.get_book("PETR4")
-    self.winq_candle = market.add_bar("WINQ19", interval=1)
-    self.petr_candle = market.add_bar("PETR4", interval=5)
+    market(self).add_book("WINQ19")
+    market(self).add_book("PETR4")
+    self.winq_book = market(self).get_book("WINQ19")
+    self.petr_book = market(self).get_book("PETR4")
+    self.winq_candle = market(self).add_bar("WINQ19", interval=1)
+    self.petr_candle = market(self).add_bar("PETR4", interval=5)
     self.winq_candle.add_sma(bar_count=5)
     self.petr_candle.add_sma(bar_count=10)
     self.petr_candle.add_adx()
@@ -832,9 +841,9 @@ book será só consultado quando um trade acontecer. Para ter este efeito
 
 ```python
 def initalize(self)
-    market.add("PETR4", book_callback=None)
-    self.petr_book = market.get("PETR4").book
-    self.petr_trades = market.get("PETR4").trades
+    market(self).add("PETR4", book_callback=None)
+    self.petr_book = market(self).get("PETR4").book
+    self.petr_trades = market(self).get("PETR4").trades
 
 def on_data(self, update):
     # Imprime o último trade e o topo do book a cada novo negócio
@@ -885,6 +894,10 @@ módulo existem as funções a seguir:
 <td>Finaliza a estrategia chamando a callback de <em>finalize</em> com o valor <em>reason=USER_QUIT</em></td>
 </tr>
 <tr class="even">
+<td><code>turn_off(&lt;text&gt;)</code></td>
+<td><p>Envia mensagem para usuário, retira estratégia do scheduller do site e termina estratégia.</p></td>
+</tr>
+<tr class="odd">
 <td><code>by_price(side=&lt;book_side&gt;, depth=&lt;max_rows&gt;)</code></td>
 <td>Agrupa o book por preço de usando como entrada o <em>lado</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> Se <em>depth é </em>0 o book inteiro é agrupado, caso contrário o book é agrupado até gerar no máximo <em>max_rows</em> como saída.</td>
 </tr>
@@ -912,8 +925,8 @@ função *check* será executada a cada 0.5s:
 
 ```python
 from neutrino import utils
-opening_event = utils.at(self.opening, 10, 00)
-check_event = utils.every(self.check, 0.5)
+opening_event = utils(self).at(self.opening, 10, 00)
+check_event = utils(self).every(self.check, 0.5)
 
 ```
 
@@ -924,9 +937,9 @@ remove os eventos agendados um a um:
 ```python
 from neutrino import utils
 
-function = utils.get_functions()
+function = utils(self).get_functions()
 for function in functions:
-    utils.remove_function(function)
+    utils(self).remove_function(function)
 
 ```
 Lembre-se que:
@@ -935,7 +948,7 @@ Lembre-se que:
     assim como todas as callbacks cadastradas pelo usuário continuam
     sendo executadas normalmente;
 
--   as funções agendadas pelo utils.at são excluídas logo após serem
+-   as funções agendadas pelo utils(self).at são excluídas logo após serem
     executadas.
 
 -   no caso de tentar inserir um agendamento repetido, isto é o mesmo
@@ -1041,7 +1054,7 @@ Por exemplo:
 from neutrino import market
 
 # Uso de callback customizadas
-self.win_summary = market.add_summary(
+self.win_summary = market(self).add_summary(
     'WINQ19',
     summary_callback=on_summary)
 ```
@@ -1061,7 +1074,7 @@ Por exemplo:
 ```python
 from neutrino import market
 
-self.win_summary = market.get_summary('WINQ19')
+self.win_summary = market(self).get_summary('WINQ19')
 print(self.win_summary.stats.high.price)
 ```
 
@@ -1080,43 +1093,6 @@ Por exemplo:
 ```python
 from neutrino import market
 
-self.win_summary = market.add_summary('WINQ19')
-success = market.remove_summary(self.win_summary)
+self.win_summary = market(self).add_summary('WINQ19')
+success = market(self).remove_summary(self.win_summary)
 ```
-
-
-## Controle de recursos
-
-O usuário pode requisitar múltiplos recursos do sistema como memoria,
-disco e CPU. Este acesso pode ser feito diretamente invocando as
-próprias funções do Python, por exemplo abrindo um arquivo e salvando
-nele quantidades absurdas de dados. Ou o acesso pode ser feito usando as
-funções deste framework, por exemplo solicitando um buffer gigante para
-armazenar os trades.
-
-Como ambas situações citadas acima geram risco, o Quantick deve deter o
-processo que ultrapasse os limiares seguros para funcionamento, auxiliando
-o controle dos recursos. Deste modo, o framework controla:
-
--   Tamanho máximo dos buffers para book, trades e candles: quantidade
-    de barras, entradas de book e trades disponíveis para o usuário.
-
--   Quantidade máxima de candles asssinados.
-
--   Quantidade máxima de indicadores assinados.
-
--   Quantidade máxima de callbacks assinadas.
-
--   Quantidade máxima de ativos.
-
--   Frequencia máxima das callbacks.
-
--   Limite de intervalos para os candles e indicadores.
-
--   Restringir o range de dados usados nos indicadores. e.g O tamanho da
-    janela no moving average determina o custo em CPU do cálculo de
-    indicador.
-
--   Data limite para a assinatura dos candles.
-
-

@@ -441,7 +441,7 @@ Baseado na configuração anterior é possível utilizar o módulo de risco
 da maneira a seguir:
 
 ```python
-win_risk = neutrino.risk.get('DI1F21')
+win_risk = neutrino.risk(self).get('DI1F21')
 print(win_risk.limit)
 # >> 200
 print(win_risk.type_limit)

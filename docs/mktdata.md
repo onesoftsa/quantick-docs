@@ -734,6 +734,8 @@ para o QuitReason são:
 
 -   NO_OMS_CONNECTION: sem conexão com o OMS
 
+-   NO_ALGOMAN_CONNECTION: sem conexão com o Algoman
+
 ### Callback default, book, trade e candles
 
 O controle do volume de notificações recebidas é feito em parte pelo

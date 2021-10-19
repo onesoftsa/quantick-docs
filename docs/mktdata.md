@@ -387,11 +387,11 @@ self.bar_winq19 = neutrino.market(self).add_bar("WINQ19")
 
 if self.bar_winq19.ready():
 
-self.sma_winq19 = self.bar_winq19.add_sma(bar_count=10,
-source=neutrino.IndicatorSource.OPEN)
+    self.sma_winq19 = self.bar_winq19.add_sma(bar_count=10,
+    source=neutrino.IndicatorSource.OPEN)
 
-print(self.bar_winq19.ready(), self.sma_winq19.ready())
-# >> True, True
+    print(self.bar_winq19.ready(), self.sma_winq19.ready())
+    # >> True, True
 ```
 
 Caso usuário não reserve uma variável para salvar o indicador construído

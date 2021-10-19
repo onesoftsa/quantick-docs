@@ -399,7 +399,7 @@ Caso usuário não reserve uma variável para salvar o indicador construído
 
 ```python
 for indicator in self.bar_winq19.get_indicators():  # retorna iterador
-    print("Indicator " + indicator.name + " value: " + str(indicator.values[-1]))
+    print("Indicator " + indicator.name + " value: " + str(indicator.values[0][-1]))
 ```
 
 ### Indicadores disponíveis
@@ -600,7 +600,7 @@ valores *values:*
 # Acessando o valor do indicador mais recente
 candle =  market(self).get_bar('WINQ19', interval=5)
 self.sma = candle.add_sma(10)
-print(self.sma.values[-1])
+print(self.sma.values[0][-1])
 ```
 
 No caso do BBANDS e SABBANDS os valores devem ser acessados pelo
@@ -612,9 +612,9 @@ candle =  market(self).get_bar('WINQ19', interval=5)
 self.sabbands = candle.add_bbands(bar_count=10, deviation_up=5,
 deviation_down=5, average=IndicatorAverage.SMA, sa_bar_count=5)
 
-print(self.sabbands.bands[0][-1])
-print(self.sabbands.bands[1][-1]
-print(self.sabbands.bands[2][-1]
+print(self.sabbands.values[0][-1])
+print(self.sabbands.values[1][-1]
+print(self.sabbands.values[2][-1]
 ```
 
 ### Atributos

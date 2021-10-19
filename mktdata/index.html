@@ -582,11 +582,11 @@ sua assinatura deve usar um objeto candle:</p>
 
 if self.bar_winq19.ready():
 
-self.sma_winq19 = self.bar_winq19.add_sma(bar_count=10,
-source=neutrino.IndicatorSource.OPEN)
+    self.sma_winq19 = self.bar_winq19.add_sma(bar_count=10,
+    source=neutrino.IndicatorSource.OPEN)
 
-print(self.bar_winq19.ready(), self.sma_winq19.ready())
-# &gt;&gt; True, True
+    print(self.bar_winq19.ready(), self.sma_winq19.ready())
+    # &gt;&gt; True, True
 </code></pre>
 <p>Caso usuário não reserve uma variável para salvar o indicador construído
 é fornecido o seguinte mecanismo de acesso:</p>
@@ -692,7 +692,7 @@ print(self.bar_winq19.ready(), self.sma_winq19.ready())
 <li><p>bar_count: quantidade de barras</p></li>
 <li><p>deviation_up:</p></li>
 <li><p>deviation_down:</p></li>
-<li><p>average: tipo de média utiliza (conferir seção Average)</p></li>
+<li><p>average: tipo de média utilizada (conferir seção Average)</p></li>
 </ul></td>
 </tr>
 <tr class="odd">
@@ -702,7 +702,7 @@ print(self.bar_winq19.ready(), self.sma_winq19.ready())
 <li><p>bar_count: quantidade de barras</p></li>
 <li><p>deviation_up:</p></li>
 <li><p>deviation_down:</p></li>
-<li><p>average: tipo de média utiliza (conferir seção Average)</p></li>
+<li><p>average: tipo de média utilizada (conferir seção Average)</p></li>
 <li><p>sa_bar_count: quantidade de barras utilizadas na média</p></li>
 </ul></td>
 </tr>
@@ -716,13 +716,62 @@ print(self.bar_winq19.ready(), self.sma_winq19.ready())
 </ul></td>
 </tr>
 <tr class="odd">
-<td>RSI*</td>
+<td>RSI</td>
 <td><code>add_rsi(bar_count=..., source=...)</code></td>
 <td><ul>
 <li><p>bar_count: quantidade de barras</p></li>
 <li><p>source: tipo de entrada</p></li>
 </ul></td>
 </tr>
+<tr class="odd">
+<td>SAR</td>
+<td><code>add_sar(acceleration=..., maximum=...)</code></td>
+<td><ul>
+<li><p>acceleration: </p></li>
+<li><p>maximum: </p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>MACD</td>
+<td><code>add_macd(fast_ma_type=..., fast_ma_period=..., slow_ma_type=..., slow_ma_period=..., signal_ma_type=..., signal_ma_period=...)</code></td>
+<td><ul>
+<li><p>fast_ma_type: tipo de média utilizada (conferir seção Average) para 'fast'</p></li>
+<li><p>fast_ma_period: periodo para a média 'fast'</p></li>
+<li><p>slow_ma_type: tipo de média utilizada (conferir seção Average) para 'slow'</p></li>
+<li><p>slow_ma_period: periodo para a média 'slow'</p></li>
+<li><p>signal_ma_type: tipo de média utilizada (conferir seção Average) para 'signal'</p></li>
+<li><p>signal_ma_period: periodo para a média 'signal'</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>STOCH</td>
+<td><code>add_stoch(fast_k_ma_period=..., slow_k_ma_type=..., slow_k_ma_period=..., slow_d_ma_type=..., slow_d_ma_period=...)</code></td>
+<td><ul>
+<li><p>fast_ma_type: tipo de média utilizada (conferir seção Average) para 'fast'</p></li>
+<li><p>fast_ma_period: periodo para a média 'fast'</p></li>
+<li><p>slow_k_ma_type: tipo de média utilizada (conferir seção Average) para 'slow_k'</p></li>
+<li><p>slow_k_ma_period: periodo para a média 'slow_k'</p></li>
+<li><p>slow_d_ma_type: tipo de média utilizada (conferir seção Average) para 'slow_d'</p></li>
+<li><p>slow_d_ma_period: periodo para a média 'slow_d'</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>STOCHF</td>
+<td><code>add_stochf(fast_k_ma_period=..., fast_d_ma_type=..., fast_d_ma_period=...)</code></td>
+<td><ul>
+<li><p>fast_k_ma_type: tipo de média utilizada (conferir seção Average) para 'fast_k'</p></li>
+<li><p>fast_d_ma_type: tipo de média utilizada (conferir seção Average) para 'fast_d'</p></li>
+<li><p>fast_d_ma_period: periodo para a média 'fast_d'</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>OBV</td>
+<td><code>add_obv(source=...)</code></td>
+<td><ul>
+<li><p>source: tipo de entrada</p></li>
+</ul></td>
+</tr>
+
 </tbody>
 </table>
 

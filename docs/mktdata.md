@@ -948,7 +948,12 @@ módulo existem as funções a seguir:
 </tr>
 <tr class="odd">
 <td><code>by_price(side=&lt;book_side&gt;, depth=&lt;max_rows&gt;)</code></td>
-<td>Agrupa o book por preço de usando como entrada o <em>lado</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> Se <em>depth é </em>0 o book inteiro é agrupado, caso contrário o book é agrupado até gerar no máximo <em>max_rows</em> como saída.</td>
+<td>Agrupa o book por preço de usando como entrada o <em>side</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> <em>depth </em> é limitado para produzir um número de linhas especificadas por <em>max_rows</em>. O valor máximo é 10.</td>
+</tr>
+<tr class="even">
+<td><code>filter_quantity(side=&lt;book_side&gt;, quantity=&lt;threshold&gt;, player=0 depth=&lt;max_rows&gt;)</code></td>
+<td>Filtra fora do book ordens com quantidades menores ao <em>threshold</em> e caso <em>player</em> especificado somente as ordens dele serão devolvidas.
+Usa como entrada o <em>side</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> <em>depth </em> é limitado para produzir um número de linhas especificadas por <em>max_rows</em>. O valor máximo é 10.</td>
 </tr>
 </tbody>
 </table>

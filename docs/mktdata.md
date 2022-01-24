@@ -951,9 +951,15 @@ módulo existem as funções a seguir:
 <td>Agrupa o book por preço de usando como entrada o <em>side</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> <em>depth </em> é limitado para produzir um número de linhas especificadas por <em>max_rows</em>. O valor máximo é 10.</td>
 </tr>
 <tr class="even">
-<td><code>filter(side=&lt;book_side&gt;, quantity=&lt;threshold&gt;, player=[], depth=&lt;max_rows&gt;)</code></td>
-<td>Remove do book ordens com quantidades menores ao <em>threshold</em> e caso <em>player</em> especificado somente as ordens deles serão apresentadas.
-Usa como entrada o <em>side</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> <em>depth </em> é limitado para produzir um número de níveis de preço especificadas por <em>max_rows</em>. O valor máximo é 10.</td>
+<td><code>filter(side=&lt;book_side&gt;, params=&lt;filter_params&gt;)</code></td>
+<td>Filtra o lado do book especificado em <em>book_side</em> de acordo os valores em <em>filter_params</em>. Este objeto pertence a classe neutrino.FilterParams, contendo os campos a seguir
+<ul>
+<li>quantity: ofertas abaixo deste limiar são descartadas</li>
+<li>players_in: lista com IDs dos players a serem mantidos no book</li>
+<li>players_in: lista com IDs dos players a serem removidos do book</li>
+<li>depth: quantidade de níveis de preço no book de saída, o máximo é 10</li>
+<li>order: ordem referência apos a qual todas as demais ordens serão removidas</li>
+</ul>
 </tr>
 </tbody>
 </table>

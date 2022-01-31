@@ -44,17 +44,19 @@ começo do dia não estão nesta lista.
 
 
 Caso o instrumento não tenha sido salvo no momento da assinatura, é
-possível utilizar a função *get* para recuperá-lo:
+possível utilizar a função *get* para recuperá-lo e também modificar as suas callbacks:
 
 | **Função**      | **Descrição**                                                                                                                            |
 |-----------------|-------------------------------------------------------------------------------------------------------------------|
 | `get(<symbol>)` | Devolve um instrumento já cadastrado usando como argumento a string com o nome do símbolo. Caso o nome seja inválido *None* é devolvido. |
+| `set(<instrument>, book_callback=<callback1>, trade_callback=<callback2>)` | <em>instrument</em> representa um objeto devolvido pela função <em>get</em> ou <em>add</em>. Os valores dos argumentos <em>book_callback</em> e <em>trade_callback</em> determinam os novos valores para as callbacks de book e trades respeitivamente. Atribuir <em>None</em> cancela a chamada à callback. A função retorna <em>True</em> caso sucesso, <em>False</em> caso contrário.|
 
 <br>
 Por exemplo:
 
 ```python
 self.instrument = market(self).get('WINQ19')
+market(self).set(self.instrumento, book_callback=None, trade_callback=new_on_trade)
 ```
 
 

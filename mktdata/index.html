@@ -221,7 +221,7 @@ e os trades que acontecem nesse momento. Vale lembrar que os trades do
 começo do dia não estão nesta lista.</p>
 <h3 id="acesso">Acesso</h3>
 <p>Caso o instrumento não tenha sido salvo no momento da assinatura, é
-possível utilizar a função <em>get</em> para recuperá-lo:</p>
+possível utilizar a função <em>get</em> para recuperá-lo e também modificar as suas callbacks:</p>
 <table>
 <thead>
 <tr>
@@ -234,11 +234,16 @@ possível utilizar a função <em>get</em> para recuperá-lo:</p>
 <td><code>get(&lt;symbol&gt;)</code></td>
 <td>Devolve um instrumento já cadastrado usando como argumento a string com o nome do símbolo. Caso o nome seja inválido <em>None</em> é devolvido.</td>
 </tr>
+<tr>
+<td><code>set(&lt;instrument&gt;, book_callback=&lt;callback1&gt;, trade_callback=&lt;callback2&gt;)</code></td>
+<td><em>instrument</em> representa um objeto devolvido pela função <em>get</em> ou <em>add</em>. Os valores dos argumentos <em>book_callback</em> e <em>trade_callback</em> determinam os novos valores para as callbacks de book e trades respeitivamente. Atribuir <em>None</em> cancela a chamada à callback. A função retorna <em>True</em> caso sucesso, <em>False</em> caso contrário.</td>
+</tr>
 </tbody>
 </table>
 <p><br>
 Por exemplo:</p>
 <pre><code class="language-python">self.instrument = market(self).get('WINQ19')
+market(self).set(self.instrumento, book_callback=None, trade_callback=new_on_trade)
 </code></pre>
 <h3 id="desassinatura">Desassinatura</h3>
 <p>Para remover um instrumento utilize o objeto obtido pela criação do
@@ -1139,7 +1144,18 @@ módulo existem as funções a seguir:</p>
 </tr>
 <tr class="odd">
 <td><code>by_price(side=&lt;book_side&gt;, depth=&lt;max_rows&gt;)</code></td>
-<td>Agrupa o book por preço de usando como entrada o <em>lado</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> Se <em>depth é </em>0 o book inteiro é agrupado, caso contrário o book é agrupado até gerar no máximo <em>max_rows</em> como saída.</td>
+<td>Agrupa o book por preço de usando como entrada o <em>side</em> (ask ou bid) do book passado como argumento <em>(book_side).</em> <em>depth </em> é limitado para produzir um número de linhas especificadas por <em>max_rows</em>. O valor máximo é 10.</td>
+</tr>
+<tr class="even">
+<td><code>filter(side=&lt;book_side&gt;, params=&lt;filter_params&gt;)</code></td>
+<td>Filtra o lado do book especificado em <em>book_side</em> de acordo os valores em <em>filter_params</em>. Este objeto pertence a classe neutrino.FilterParams, contendo os campos a seguir
+<ul>
+<li>quantity: ofertas abaixo deste limiar são descartadas</li>
+<li>players_in: lista com IDs dos players a serem mantidos no book</li>
+<li>players_in: lista com IDs dos players a serem removidos do book</li>
+<li>depth: quantidade de níveis de preço no book de saída, o máximo é 10</li>
+<li>order: ordem referência apos a qual todas as demais ordens serão removidas</li>
+</ul>
 </tr>
 </tbody>
 </table>
